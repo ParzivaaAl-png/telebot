@@ -17,7 +17,7 @@ if (!token || token === 'YOUR_TELEGRAM_BOT_TOKEN' || token.includes('1234567890:
 
 const bot = new Telegraf(token);
 const prisma = new PrismaClient();
-const miniappUrl = process.env.FRONTEND_MINIAPP_URL || 'http://localhost:5173';
+const miniappUrl = process.env.FRONTEND_MINIAPP_URL || 'https://frontend-miniapp-eight.vercel.app';
 
 bot.start(async (ctx) => {
   const name = ctx.from.first_name || 'Пилот';
