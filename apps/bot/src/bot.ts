@@ -2,7 +2,11 @@ import { Telegraf, Markup } from 'telegraf';
 import { PrismaClient } from '@prisma/client';
 import * as dotenv from 'dotenv';
 import * as http from 'http';
+import * as path from 'path';
 
+// Support loading from root .env in monorepo setup
+dotenv.config({ path: path.resolve(process.cwd(), '../../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 dotenv.config();
 
 const token = process.env.TELEGRAM_BOT_TOKEN;
@@ -72,18 +76,20 @@ bot.command('profile', async (ctx) => {
 });
 
 bot.launch()
-  .then(() => {
-    console.log('Telegram Bot successfully launched!');
-    // Start dummy HTTP health check server for Render Free Web Service plan
-    const port = process.env.PORT || 8080;
-    http.createServer((req, res) => {
-      res.writeHead(200, { 'Content-Type': 'text/plain' });
-      res.end('OK');
-    }).listen(port, () => {
-      console.log(`Health check HTTP server is listening on port ${port}`);
-    });
-  })
-  .catch((err) => console.error('Failed to launch Telegram Bot:', err));
+  .catch((err) => {
+    console.error('Failed to launch Telegram Bot:', err);
+    process.exit(1);
+  });
+
+console.log('Telegram Bot successfully launched!');
+// On Render, PORT is injected automatically. Locally, we use 8080 to avoid conflicts with backend PORT (3000)
+const port = process.env.PORT && process.env.PORT !== '3000' ? process.env.PORT : 8080;
+http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('OK');
+}).listen(port, () => {
+  console.log(`Health check HTTP server is listening on port ${port}`);
+});
 
 process.once('SIGINT', () => {
   bot.stop('SIGINT');

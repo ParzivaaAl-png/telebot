@@ -17,9 +17,9 @@ services:
       - key: ADMIN_JWT_EXPIRES_IN
         value: 7d
       - key: TELEGRAM_BOT_TOKEN
-        value: 8810821236:AAG-ROj5Eu-e9WgyvDLuIwWgcEFABO9paH0
+        value: 8766839286:AAEqWXCUPF3wHrXci7fIH0KqCiSFi98UKbQ
       - key: TELEGRAM_BOT_USERNAME
-        value: AtlasFleetBot
+        value: atlas_fllet_bot
       - key: DATABASE_URL
         sync: false
 
@@ -33,9 +33,9 @@ services:
     startCommand: npm run --prefix apps/bot start
     envVars:
       - key: TELEGRAM_BOT_TOKEN
-        value: 8810821236:AAG-ROj5Eu-e9WgyvDLuIwWgcEFABO9paH0
+        value: 8766839286:AAEqWXCUPF3wHrXci7fIH0KqCiSFi98UKbQ
       - key: TELEGRAM_BOT_USERNAME
-        value: AtlasFleetBot
+        value: atlas_fllet_bot
       - key: DATABASE_URL
         sync: false
       - key: FRONTEND_MINIAPP_URL

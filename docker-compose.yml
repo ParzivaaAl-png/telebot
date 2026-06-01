@@ -27,8 +27,8 @@ services:
       PORT: 3000
       JWT_SECRET: "super-secret-cosmic-key-2026"
       ADMIN_JWT_EXPIRES_IN: "7d"
-      TELEGRAM_BOT_TOKEN: "8810821236:AAG-ROj5Eu-e9WgyvDLuIwWgcEFABO9paH0"
-      TELEGRAM_BOT_USERNAME: "AtlasFleetBot"
+      TELEGRAM_BOT_TOKEN: "8766839286:AAEqWXCUPF3wHrXci7fIH0KqCiSFi98UKbQ"
+      TELEGRAM_BOT_USERNAME: "atlas_fllet_bot"
     depends_on:
       - db
 
@@ -40,8 +40,8 @@ services:
     restart: always
     environment:
       DATABASE_URL: "postgresql://postgres:postgrespassword@db:5432/atlasfleet?schema=public"
-      TELEGRAM_BOT_TOKEN: "8810821236:AAG-ROj5Eu-e9WgyvDLuIwWgcEFABO9paH0"
-      TELEGRAM_BOT_USERNAME: "AtlasFleetBot"
+      TELEGRAM_BOT_TOKEN: "8766839286:AAEqWXCUPF3wHrXci7fIH0KqCiSFi98UKbQ"
+      TELEGRAM_BOT_USERNAME: "atlas_fllet_bot"
       API_URL: "http://backend:3000/api"
     depends_on:
       - backend
