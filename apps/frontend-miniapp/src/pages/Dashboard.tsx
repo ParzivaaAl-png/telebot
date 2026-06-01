@@ -12,9 +12,10 @@ export default function Dashboard() {
   const { setActiveTab } = useAppStore();
 
   const { data, isLoading, error } = useQuery<CourierMeResponse>({
-    queryKey: ['me'],
+    queryKey: ['me', initData],
     queryFn: () => apiRequest<CourierMeResponse>('/courier/me', initData),
     refetchInterval: 5000,
+    enabled: !!initData,
   });
 
   if (isLoading) {

@@ -10,8 +10,12 @@ export interface TelegramUser {
 
 export function useTelegram() {
   const [tg, setTg] = useState<any>(null);
-  const [user, setUser] = useState<TelegramUser | null>(null);
-  const [initData, setInitData] = useState<string>('');
+  const [user, setUser] = useState<TelegramUser | null>(() => {
+    return (window as any).Telegram?.WebApp?.initDataUnsafe?.user || null;
+  });
+  const [initData, setInitData] = useState<string>(() => {
+    return (window as any).Telegram?.WebApp?.initData || '';
+  });
 
   useEffect(() => {
     const webApp = (window as any).Telegram?.WebApp;

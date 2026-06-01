@@ -10,9 +10,10 @@ export default function StarMap() {
   const { initData } = useTelegram();
 
   const { data, isLoading, error } = useQuery<CourierStarMapResponse>({
-    queryKey: ['starmap'],
+    queryKey: ['starmap', initData],
     queryFn: () => apiRequest<CourierStarMapResponse>('/courier/me/starmap', initData),
     refetchInterval: 5000,
+    enabled: !!initData,
   });
 
   if (isLoading) {

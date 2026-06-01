@@ -13,9 +13,10 @@ export default function Notifications() {
   const queryClient = useQueryClient();
 
   const { data, isLoading, error } = useQuery<CourierNotificationsResponse>({
-    queryKey: ['notifications'],
+    queryKey: ['notifications', initData],
     queryFn: () => apiRequest<CourierNotificationsResponse>('/courier/me/notifications', initData),
     refetchInterval: 5000,
+    enabled: !!initData,
   });
 
   const readMutation = useMutation({

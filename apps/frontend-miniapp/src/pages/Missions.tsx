@@ -11,9 +11,10 @@ export default function Missions() {
   const { initData } = useTelegram();
 
   const { data, isLoading, error } = useQuery<CourierMissionsResponse>({
-    queryKey: ['missions'],
+    queryKey: ['missions', initData],
     queryFn: () => apiRequest<CourierMissionsResponse>('/courier/me/missions', initData),
     refetchInterval: 5000,
+    enabled: !!initData,
   });
 
   // Launch confetti if the driver has completed missions
