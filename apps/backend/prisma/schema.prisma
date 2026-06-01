@@ -1,0 +1,98 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Rank {
+  CADET
+  NAVIGATOR
+  PILOT
+  COMMANDER
+}
+
+enum MissionStatus {
+  LOCKED
+  ACTIVE
+  COMPLETED
+}
+
+model Courier {
+  id              String         @id @default(uuid())
+  telegramId      String         @unique @map("telegram_id")
+  username        String?
+  name            String
+  ordersCount     Int            @default(0) @map("orders_count")
+  rating          Float          @default(5.0)
+  rank            Rank           @default(CADET)
+  starMapProgress Int            @default(0) @map("starmap_progress")
+  registeredAt    DateTime       @default(now()) @map("registered_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+  
+  missions        MissionStage[]
+  bonusHistory    BonusHistory[]
+  notifications   Notification[]
+
+  @@map("couriers")
+}
+
+model MissionStage {
+  id         String        @id @default(uuid())
+  courierId  String        @map("courier_id")
+  courier    Courier       @relation(fields: [courierId], references: [id], onDelete: Cascade)
+  stage      Int           // 1, 2, or 3
+  status     MissionStatus @default(LOCKED)
+  progress   Int           @default(0)
+  updatedAt  DateTime      @updatedAt @map("updated_at")
+
+  @@unique([courierId, stage])
+  @@map("mission_stages")
+}
+
+model BonusHistory {
+  id        String   @id @default(uuid())
+  courierId String   @map("courier_id")
+  courier   Courier  @relation(fields: [courierId], references: [id], onDelete: Cascade)
+  type      String   // "MISSION_1", "MISSION_2", "MISSION_3", "STAR_MAP"
+  amount    String
+  grantedAt DateTime @default(now()) @map("granted_at")
+
+  @@map("bonus_history")
+}
+
+model Admin {
+  id           String     @id @default(uuid())
+  username     String     @unique
+  passwordHash String     @map("password_hash")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  auditLogs    AuditLog[]
+
+  @@map("admins")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  adminId   String   @map("admin_id")
+  admin     Admin    @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  action    String
+  details   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("audit_logs")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  courierId String   @map("courier_id")
+  courier   Courier  @relation(fields: [courierId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      String   // "MISSION_COMPLETE", "MISSION_UNLOCKED", "BONUS_REWARD", "MISSION_EXPIRING", "ORDERS_LEFT"
+  isRead    Boolean  @default(false) @map("is_read")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("notifications")
+}

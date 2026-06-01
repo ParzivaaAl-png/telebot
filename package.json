@@ -1,0 +1,19 @@
+{
+  "name": "atlas-fleet-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "bootstrap": "npm install",
+    "db:generate": "npm run --prefix apps/backend prisma:generate",
+    "db:seed": "npm run --prefix apps/backend prisma:seed",
+    "dev:backend": "npm run --prefix apps/backend start:dev",
+    "dev:miniapp": "npm run --prefix apps/frontend-miniapp dev",
+    "dev:admin": "npm run --prefix apps/admin-panel dev",
+    "dev:bot": "npm run --prefix apps/bot dev",
+    "build:all": "npm run build --workspaces"
+  }
+}

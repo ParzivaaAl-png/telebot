@@ -1,0 +1,40 @@
+services:
+  # 1. Бэкенд NestJS (Веб-сервис)
+  - type: web
+    name: atlas-fleet-backend
+    env: node
+    plan: free
+    buildCommand: npm install && npm run --prefix packages/shared-types build && npm run --prefix apps/backend prisma:generate && npm run --prefix apps/backend build
+    startCommand: npm run --prefix apps/backend start:prod
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true # Render автоматически сгенерирует надежный случайный ключ JWT
+      - key: ADMIN_JWT_EXPIRES_IN
+        value: 7d
+      - key: TELEGRAM_BOT_TOKEN
+        value: 8810821236:AAG-ROj5Eu-e9WgyvDLuIwWgcEFABO9paH0
+      - key: TELEGRAM_BOT_USERNAME
+        value: AtlasFleetBot
+      - key: DATABASE_URL
+        placeholder: Вставьте ссылку на базу данных (DATABASE_URL) от Supabase
+
+  # 2. Telegram-бот Telegraf (Фоновый процесс)
+  - type: worker
+    name: atlas-fleet-bot
+    env: node
+    plan: free
+    buildCommand: npm install && npm run --prefix packages/shared-types build && npm run --prefix apps/bot build
+    startCommand: npm run --prefix apps/bot start
+    envVars:
+      - key: TELEGRAM_BOT_TOKEN
+        value: 8810821236:AAG-ROj5Eu-e9WgyvDLuIwWgcEFABO9paH0
+      - key: TELEGRAM_BOT_USERNAME
+        value: AtlasFleetBot
+      - key: DATABASE_URL
+        placeholder: Вставьте ту же ссылку на базу данных (DATABASE_URL) от Supabase
+      - key: FRONTEND_MINIAPP_URL
+        placeholder: Вставьте HTTPS-адрес вашего Mini App от Vercel
