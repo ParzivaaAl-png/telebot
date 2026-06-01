@@ -4,6 +4,7 @@ services:
     name: atlas-fleet-backend
     env: node
     plan: free
+    region: frankfurt # Переносим сервер во Франкфурт
     buildCommand: npm install && npm run --prefix apps/backend prisma:generate && npm run --prefix apps/backend build
     startCommand: npm run --prefix apps/backend start:prod
     envVars:
@@ -27,6 +28,7 @@ services:
     name: atlas-fleet-bot
     env: node
     plan: free
+    region: frankfurt # Переносим бота во Франкфурт
     buildCommand: npm install && npm run --prefix apps/bot build
     startCommand: npm run --prefix apps/bot start
     envVars:
