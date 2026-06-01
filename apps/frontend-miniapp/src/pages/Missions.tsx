@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '../api';
 import { useTelegram } from '../hooks/useTelegram';
-import { CourierMissionsResponse } from '@atlas-fleet/shared-types';
+import { CourierMissionsResponse } from '../shared-types';
 import { Lock, Check, Zap, HelpCircle, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';

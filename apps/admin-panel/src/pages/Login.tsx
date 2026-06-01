@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { adminRequest } from '../api';
 import { useAdminStore } from '../store';
 import { KeyRound, ShieldAlert } from 'lucide-react';
-import { AdminLoginResponse } from '@atlas-fleet/shared-types';
+import { AdminLoginResponse } from '../shared-types';
 
 export default function Login() {
   const [username, setUsername] = useState('');

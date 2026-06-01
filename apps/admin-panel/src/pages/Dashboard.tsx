@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { adminRequest } from '../api';
-import { AdminStatsResponse } from '@atlas-fleet/shared-types';
+import { AdminStatsResponse } from '../shared-types';
 import { Users, Landmark, Star, Award, Compass, BarChart3, Activity } from 'lucide-react';
 
 export default function Dashboard() {

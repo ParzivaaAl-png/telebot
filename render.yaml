@@ -4,7 +4,7 @@ services:
     name: atlas-fleet-backend
     env: node
     plan: free
-    buildCommand: npm install && npm run --prefix packages/shared-types build && npm run --prefix apps/backend prisma:generate && npm run --prefix apps/backend build
+    buildCommand: npm install && npm run --prefix apps/backend prisma:generate && npm run --prefix apps/backend build
     startCommand: npm run --prefix apps/backend start:prod
     envVars:
       - key: PORT
@@ -12,7 +12,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: JWT_SECRET
-        generateValue: true # Render автоматически сгенерирует надежный случайный ключ JWT
+        generateValue: true
       - key: ADMIN_JWT_EXPIRES_IN
         value: 7d
       - key: TELEGRAM_BOT_TOKEN
@@ -20,14 +20,14 @@ services:
       - key: TELEGRAM_BOT_USERNAME
         value: AtlasFleetBot
       - key: DATABASE_URL
-        sync: false # Render попросит вас ввести это значение при деплое
+        sync: false
 
-  # 2. Telegram-бот Telegraf (Фоновый процесс)
-  - type: worker
+  # 2. Telegram-бот Telegraf (Веб-сервис для работы на бесплатном тарифе)
+  - type: web
     name: atlas-fleet-bot
     env: node
     plan: free
-    buildCommand: npm install && npm run --prefix packages/shared-types build && npm run --prefix apps/bot build
+    buildCommand: npm install && npm run --prefix apps/bot build
     startCommand: npm run --prefix apps/bot start
     envVars:
       - key: TELEGRAM_BOT_TOKEN
@@ -35,6 +35,6 @@ services:
       - key: TELEGRAM_BOT_USERNAME
         value: AtlasFleetBot
       - key: DATABASE_URL
-        sync: false # Render попросит вас ввести это значение при деплое
+        sync: false
       - key: FRONTEND_MINIAPP_URL
-        sync: false # Render попросит вас ввести это значение при деплое
+        sync: false

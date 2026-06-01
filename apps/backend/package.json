@@ -30,8 +30,7 @@
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
-    "telegraf": "^4.12.0",
-    "@atlas-fleet/shared-types": "*"
+    "telegraf": "^4.12.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '../api';
 import { useTelegram } from '../hooks/useTelegram';
 import { useAppStore } from '../store';
-import { CourierMeResponse } from '@atlas-fleet/shared-types';
+import { CourierMeResponse } from '../shared-types';
 import { Shield, Rocket, Compass, Award, Star, Bell, ArrowRight, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
 

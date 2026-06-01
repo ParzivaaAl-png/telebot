@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { adminRequest } from '../api';
-import { AuditLog } from '@atlas-fleet/shared-types';
+import { AuditLog } from '../shared-types';
 import { Activity } from 'lucide-react';
 
 export default function AuditLogs() {

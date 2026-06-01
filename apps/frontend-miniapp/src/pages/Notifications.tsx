@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '../api';
 import { useTelegram } from '../hooks/useTelegram';
 import { useAppStore } from '../store';
-import { CourierNotificationsResponse } from '@atlas-fleet/shared-types';
+import { CourierNotificationsResponse } from '../shared-types';
 import { Bell, Check, Award, AlertTriangle, Play, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
 

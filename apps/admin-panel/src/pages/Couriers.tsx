@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { adminRequest } from '../api';
 import { useAdminStore } from '../store';
-import { AdminCouriersResponse, Rank } from '@atlas-fleet/shared-types';
+import { AdminCouriersResponse, Rank } from '../shared-types';
 import { Search, ChevronLeft, ChevronRight, Eye, ArrowUpDown, ShieldCheck, Activity } from 'lucide-react';
 
 export default function Couriers() {

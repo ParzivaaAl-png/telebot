@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '../api';
 import { useTelegram } from '../hooks/useTelegram';
-import { CourierStarMapResponse } from '@atlas-fleet/shared-types';
+import { CourierStarMapResponse } from '../shared-types';
 import { Navigation, Compass, Calendar, Activity, Map } from 'lucide-react';
 import { motion } from 'framer-motion';
 

@@ -1,6 +1,7 @@
 import { Telegraf, Markup } from 'telegraf';
 import { PrismaClient } from '@prisma/client';
 import * as dotenv from 'dotenv';
+import * as http from 'http';
 
 dotenv.config();
 
@@ -71,7 +72,17 @@ bot.command('profile', async (ctx) => {
 });
 
 bot.launch()
-  .then(() => console.log('Telegram Bot successfully launched!'))
+  .then(() => {
+    console.log('Telegram Bot successfully launched!');
+    // Start dummy HTTP health check server for Render Free Web Service plan
+    const port = process.env.PORT || 8080;
+    http.createServer((req, res) => {
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+      res.end('OK');
+    }).listen(port, () => {
+      console.log(`Health check HTTP server is listening on port ${port}`);
+    });
+  })
   .catch((err) => console.error('Failed to launch Telegram Bot:', err));
 
 process.once('SIGINT', () => {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminRequest } from '../api';
-import { CSVImportPreviewItem, CSVImportResult } from '@atlas-fleet/shared-types';
+import { CSVImportPreviewItem, CSVImportResult } from '../shared-types';
 import { Upload, CheckCircle2, AlertOctagon, HelpCircle, FileText, Check, AlertCircle } from 'lucide-react';
 
 export default function ImportCSV() {

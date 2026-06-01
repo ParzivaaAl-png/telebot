@@ -11,7 +11,7 @@ import {
   AdminStatsResponse, 
   CSVImportPreviewItem, 
   CSVImportResult 
-} from '@atlas-fleet/shared-types';
+} from '../shared-types';
 
 @Injectable()
 export class AdminService {

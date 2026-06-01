@@ -7,7 +7,7 @@ import {
   CourierMissionsResponse, 
   CourierStarMapResponse, 
   CourierNotificationsResponse 
-} from '@atlas-fleet/shared-types';
+} from '../shared-types';
 
 @Injectable()
 export class CourierService {
