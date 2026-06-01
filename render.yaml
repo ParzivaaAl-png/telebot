@@ -20,7 +20,7 @@ services:
       - key: TELEGRAM_BOT_USERNAME
         value: AtlasFleetBot
       - key: DATABASE_URL
-        placeholder: Вставьте ссылку на базу данных (DATABASE_URL) от Supabase
+        sync: false # Render попросит вас ввести это значение при деплое
 
   # 2. Telegram-бот Telegraf (Фоновый процесс)
   - type: worker
@@ -35,6 +35,6 @@ services:
       - key: TELEGRAM_BOT_USERNAME
         value: AtlasFleetBot
       - key: DATABASE_URL
-        placeholder: Вставьте ту же ссылку на базу данных (DATABASE_URL) от Supabase
+        sync: false # Render попросит вас ввести это значение при деплое
       - key: FRONTEND_MINIAPP_URL
-        placeholder: Вставьте HTTPS-адрес вашего Mini App от Vercel
+        sync: false # Render попросит вас ввести это значение при деплое
