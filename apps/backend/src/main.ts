@@ -17,8 +17,8 @@ async function bootstrap() {
     allowedHeaders: 'Content-Type, Accept, Authorization, x-telegram-init-data',
   });
 
-  // Global routing prefix
-  app.setGlobalPrefix('api');
+  // Global routing prefix (exclude root / so UptimeRobot / browsers get a direct 200 OK)
+  app.setGlobalPrefix('api', { exclude: ['/'] });
 
   // Request validation
   app.useGlobalPipes(new ValidationPipe({
