@@ -75,13 +75,6 @@ bot.command('profile', async (ctx) => {
   }
 });
 
-bot.launch()
-  .catch((err) => {
-    console.error('Failed to launch Telegram Bot:', err);
-    process.exit(1);
-  });
-
-console.log('Telegram Bot successfully launched!');
 // On Render, PORT is injected automatically. Locally, we use 8080 to avoid conflicts with backend PORT (3000)
 const port = process.env.PORT && process.env.PORT !== '3000' ? process.env.PORT : 8080;
 http.createServer((req, res) => {
@@ -90,6 +83,27 @@ http.createServer((req, res) => {
 }).listen(port, () => {
   console.log(`Health check HTTP server is listening on port ${port}`);
 });
+
+async function launchBotWithRetry(retries = 30, delayMs = 5000) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      console.log(`Launching Telegram Bot (attempt ${i + 1}/${retries})...`);
+      await bot.launch();
+      console.log('Telegram Bot successfully launched!');
+      return;
+    } catch (err: any) {
+      console.error(`Failed to launch Telegram Bot on attempt ${i + 1}:`, err.message || err);
+      if (i === retries - 1) {
+        console.error('Max retries reached. Exiting...');
+        process.exit(1);
+      }
+      console.log(`Retrying launch in ${delayMs / 1000}s...`);
+      await new Promise(resolve => setTimeout(resolve, delayMs));
+    }
+  }
+}
+
+launchBotWithRetry();
 
 process.once('SIGINT', () => {
   bot.stop('SIGINT');
