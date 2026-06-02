@@ -66,88 +66,90 @@ export default function App() {
           {renderActiveScreen()}
         </main>
 
-        {/* Bottom Tab Bar */}
-        <nav className="fixed bottom-0 left-0 right-0 z-40 max-w-md mx-auto bg-[#0A1428]/72 backdrop-blur-[22px] border-t border-white/[0.06] px-3 py-2 flex justify-around shadow-[0_-12px_40px_rgba(0,0,0,0.35)] pb-[calc(0.5rem+env(safe-area-inset-bottom))]">
+        {/* Bottom Tab Bar — floating capsule above Home Indicator */}
+        <nav className="fixed bottom-0 left-0 right-0 z-40 max-w-md mx-auto px-4" style={{ paddingBottom: 'calc(8px + env(safe-area-inset-bottom, 8px))' }}>
+          <div className="bg-[#1A2235]/85 backdrop-blur-[24px] rounded-2xl px-2 py-1.5 flex justify-around shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
           
-          {/* Tab 1: Dashboard */}
-          <button
-            onClick={() => setActiveTab('dashboard')}
-            className="flex flex-col items-center relative py-1.5 w-20 select-none focus:outline-none"
-          >
-            {activeTab === 'dashboard' && (
-              <motion.div
-                layoutId="active-nav-pill"
-                className="absolute inset-0 bg-white/10 backdrop-blur-md border border-white/[0.05] rounded-[18px] -z-10"
-                transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-              />
-            )}
-            <Compass className={`w-5 h-5 transition-colors duration-200 ${activeTab === 'dashboard' ? 'text-space-blue' : 'text-space-gray'}`} />
-            <span className={`text-[9px] font-semibold tracking-wide mt-1 transition-colors duration-200 ${activeTab === 'dashboard' ? 'text-space-blue' : 'text-space-gray'}`}>
-              Главная
-            </span>
-          </button>
-          
-          {/* Tab 2: Missions */}
-          <button
-            onClick={() => setActiveTab('missions')}
-            className="flex flex-col items-center relative py-1.5 w-20 select-none focus:outline-none"
-          >
-            {activeTab === 'missions' && (
-              <motion.div
-                layoutId="active-nav-pill"
-                className="absolute inset-0 bg-white/10 backdrop-blur-md border border-white/[0.05] rounded-[18px] -z-10"
-                transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-              />
-            )}
-            <Rocket className={`w-5 h-5 transition-colors duration-200 ${activeTab === 'missions' ? 'text-space-blue' : 'text-space-gray'}`} />
-            <span className={`text-[9px] font-semibold tracking-wide mt-1 transition-colors duration-200 ${activeTab === 'missions' ? 'text-space-blue' : 'text-space-gray'}`}>
-              Миссии
-            </span>
-          </button>
-          
-          {/* Tab 3: StarMap */}
-          <button
-            onClick={() => setActiveTab('starmap')}
-            className="flex flex-col items-center relative py-1.5 w-20 select-none focus:outline-none"
-          >
-            {activeTab === 'starmap' && (
-              <motion.div
-                layoutId="active-nav-pill"
-                className="absolute inset-0 bg-white/10 backdrop-blur-md border border-white/[0.05] rounded-[18px] -z-10"
-                transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-              />
-            )}
-            <Star className={`w-5 h-5 transition-colors duration-200 ${activeTab === 'starmap' ? 'text-space-blue' : 'text-space-gray'}`} />
-            <span className={`text-[9px] font-semibold tracking-wide mt-1 transition-colors duration-200 ${activeTab === 'starmap' ? 'text-space-blue' : 'text-space-gray'}`}>
-              Карта
-            </span>
-          </button>
-          
-          {/* Tab 4: Notifications */}
-          <button
-            onClick={() => setActiveTab('notifications')}
-            className="flex flex-col items-center relative py-1.5 w-20 select-none focus:outline-none"
-          >
-            {activeTab === 'notifications' && (
-              <motion.div
-                layoutId="active-nav-pill"
-                className="absolute inset-0 bg-white/10 backdrop-blur-md border border-white/[0.05] rounded-[18px] -z-10"
-                transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-              />
-            )}
-            <div className="relative flex items-center justify-center">
-              <Bell className={`w-5 h-5 transition-colors duration-200 ${activeTab === 'notifications' ? 'text-space-blue' : 'text-space-gray'}`} />
-              {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center border border-[#0A1628] z-20">
-                  {unreadCount}
-                </span>
+            {/* Tab 1: Dashboard */}
+            <button
+              onClick={() => setActiveTab('dashboard')}
+              className="flex flex-col items-center relative py-1.5 w-20 select-none focus:outline-none"
+            >
+              {activeTab === 'dashboard' && (
+                <motion.div
+                  layoutId="active-nav-pill"
+                  className="absolute inset-0 bg-white/10 rounded-xl -z-10"
+                  transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                />
               )}
-            </div>
-            <span className={`text-[9px] font-semibold tracking-wide mt-1 transition-colors duration-200 ${activeTab === 'notifications' ? 'text-space-blue' : 'text-space-gray'}`}>
-              Журнал
-            </span>
-          </button>
+              <Compass className={`w-5 h-5 transition-colors duration-200 ${activeTab === 'dashboard' ? 'text-space-blue' : 'text-space-gray'}`} />
+              <span className={`text-[9px] font-semibold tracking-wide mt-1 transition-colors duration-200 ${activeTab === 'dashboard' ? 'text-space-blue' : 'text-space-gray'}`}>
+                Главная
+              </span>
+            </button>
+            
+            {/* Tab 2: Missions */}
+            <button
+              onClick={() => setActiveTab('missions')}
+              className="flex flex-col items-center relative py-1.5 w-20 select-none focus:outline-none"
+            >
+              {activeTab === 'missions' && (
+                <motion.div
+                  layoutId="active-nav-pill"
+                  className="absolute inset-0 bg-white/10 rounded-xl -z-10"
+                  transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                />
+              )}
+              <Rocket className={`w-5 h-5 transition-colors duration-200 ${activeTab === 'missions' ? 'text-space-blue' : 'text-space-gray'}`} />
+              <span className={`text-[9px] font-semibold tracking-wide mt-1 transition-colors duration-200 ${activeTab === 'missions' ? 'text-space-blue' : 'text-space-gray'}`}>
+                Миссии
+              </span>
+            </button>
+            
+            {/* Tab 3: StarMap */}
+            <button
+              onClick={() => setActiveTab('starmap')}
+              className="flex flex-col items-center relative py-1.5 w-20 select-none focus:outline-none"
+            >
+              {activeTab === 'starmap' && (
+                <motion.div
+                  layoutId="active-nav-pill"
+                  className="absolute inset-0 bg-white/10 rounded-xl -z-10"
+                  transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                />
+              )}
+              <Star className={`w-5 h-5 transition-colors duration-200 ${activeTab === 'starmap' ? 'text-space-blue' : 'text-space-gray'}`} />
+              <span className={`text-[9px] font-semibold tracking-wide mt-1 transition-colors duration-200 ${activeTab === 'starmap' ? 'text-space-blue' : 'text-space-gray'}`}>
+                Карта
+              </span>
+            </button>
+            
+            {/* Tab 4: Notifications */}
+            <button
+              onClick={() => setActiveTab('notifications')}
+              className="flex flex-col items-center relative py-1.5 w-20 select-none focus:outline-none"
+            >
+              {activeTab === 'notifications' && (
+                <motion.div
+                  layoutId="active-nav-pill"
+                  className="absolute inset-0 bg-white/10 rounded-xl -z-10"
+                  transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                />
+              )}
+              <div className="relative flex items-center justify-center">
+                <Bell className={`w-5 h-5 transition-colors duration-200 ${activeTab === 'notifications' ? 'text-space-blue' : 'text-space-gray'}`} />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center border border-[#1A2235] z-20">
+                    {unreadCount}
+                  </span>
+                )}
+              </div>
+              <span className={`text-[9px] font-semibold tracking-wide mt-1 transition-colors duration-200 ${activeTab === 'notifications' ? 'text-space-blue' : 'text-space-gray'}`}>
+                Журнал
+              </span>
+            </button>
 
+          </div>
         </nav>
       </div>
     </QueryClientProvider>
