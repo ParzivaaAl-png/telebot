@@ -222,9 +222,7 @@ export default function Dashboard() {
     <div className="space-y-6 px-4 py-4 font-sans text-white">
       
       {/* 1. Apple Wallet Style Card */}
-      <motion.div 
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
+      <div
         className="glass-card relative overflow-hidden p-5 shadow-ios-card bg-gradient-to-br from-white/[0.04] to-white/[0.01]"
       >
         {/* Soft wallet glossy shine */}
@@ -330,7 +328,7 @@ export default function Dashboard() {
           )}
         </div>
 
-      </motion.div>
+      </div>
 
       {/* 2. Navigation Cards (First Flight & Star Map) */}
       <div className="space-y-3">
@@ -342,7 +340,7 @@ export default function Dashboard() {
           {/* Card 1: First Flight */}
           <div 
             onClick={() => setActiveTab('missions')}
-            className="glass-card p-4 flex flex-col justify-between cursor-pointer hover:bg-white/[0.05] active:scale-[0.97] transition-all relative overflow-hidden h-32"
+            className="glass-card p-4 flex flex-col justify-between cursor-pointer hover:bg-white/[0.05] active:bg-white/[0.08] transition-colors duration-200 relative overflow-hidden h-32"
           >
             <div className="wallet-card-overlay" />
             <div className="flex justify-between items-start relative z-10">
@@ -364,7 +362,7 @@ export default function Dashboard() {
           {/* Card 2: Star Map */}
           <div 
             onClick={() => setActiveTab('starmap')}
-            className="glass-card p-4 flex flex-col justify-between cursor-pointer hover:bg-white/[0.05] active:scale-[0.97] transition-all relative overflow-hidden h-32"
+            className="glass-card p-4 flex flex-col justify-between cursor-pointer hover:bg-white/[0.05] active:bg-white/[0.08] transition-colors duration-200 relative overflow-hidden h-32"
           >
             <div className="wallet-card-overlay" />
             <div className="flex justify-between items-start relative z-10">

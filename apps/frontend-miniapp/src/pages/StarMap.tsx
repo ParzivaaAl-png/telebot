@@ -96,9 +96,7 @@ export default function StarMap() {
       </div>
 
       {/* Main progress dial (Apple Fitness activity ring style) */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.96 }}
-        animate={{ opacity: 1, scale: 1 }}
+      <div
         className="glass-card p-6 flex flex-col items-center relative overflow-hidden bg-gradient-to-br from-white/[0.03] to-white/[0.01]"
       >
         <div className="wallet-card-overlay" />
@@ -161,7 +159,7 @@ export default function StarMap() {
             </p>
           )}
         </div>
-      </motion.div>
+      </div>
 
       {/* Bonus Payout History */}
       <div className="space-y-2.5">
@@ -177,10 +175,8 @@ export default function StarMap() {
         ) : (
           <div className="glass-card overflow-hidden border border-white/5 divide-y divide-white/5 shadow-sm">
             {history.map((b) => (
-              <motion.div
+              <div
                 key={b.id}
-                initial={{ opacity: 0, x: -5 }}
-                animate={{ opacity: 1, x: 0 }}
                 className="flex justify-between items-center p-4 hover:bg-white/[0.01] transition-all"
               >
                 <div className="flex items-center space-x-3.5">
@@ -200,7 +196,7 @@ export default function StarMap() {
                   <span className="text-sm font-bold text-space-green">+{b.amount}</span>
                   <ChevronRight className="w-4 h-4 text-space-gray/30" />
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         )}

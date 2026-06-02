@@ -130,12 +130,9 @@ export default function Notifications({ active }: { active?: boolean }) {
         </div>
       ) : (
         <div className="space-y-2.5">
-          {data.notifications.map((n, idx) => (
+          {data.notifications.map((n) => (
             <motion.div
               key={n.id}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.04 }}
               className={`ios-notification flex items-start space-x-3.5 p-4 relative overflow-hidden ${
                 !n.isRead ? 'bg-white/[0.06]' : ''
               }`}

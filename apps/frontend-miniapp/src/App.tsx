@@ -73,7 +73,6 @@ export default function App() {
           style={{ bottom: 'calc(16px + env(safe-area-inset-bottom, 8px))' }}
         >
           <div className="bg-[#0A1628]/45 border border-white/[0.08] backdrop-blur-[32px] rounded-full px-3 py-2 flex justify-around shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
-          
             {/* Tab 1: Dashboard */}
             <button
               onClick={() => setActiveTab('dashboard')}

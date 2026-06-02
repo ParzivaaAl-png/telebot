@@ -53,13 +53,19 @@
 
 /* Premium Apple-style Glassmorphism Cards with NO glowing borders or neon text */
 .glass-card {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  /* Static frosted panel — NO live backdrop-filter on purpose. On iOS WebKit
+     (Telegram WebView) a real backdrop-filter blur re-rasterizes whenever
+     anything composites near it (animation end, mount, scroll), and for one
+     frame it samples an empty backdrop → the card flashes fully black, then
+     snaps back. A solid translucent fill over the dark app background reads
+     almost identically to the frosted glass and can never flash. */
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
   border-radius: 20px;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: background-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .glass-card-hover {
@@ -74,13 +80,12 @@
 
 /* iOS Lockscreen Notification bubble styling */
 .ios-notification {
-  background: rgba(255, 255, 255, 0.035);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  /* Static panel — no live backdrop-filter (see .glass-card note). */
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.12);
   border-radius: 16px;
-  transition: all 0.25s ease;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
 .ios-notification:hover {

@@ -3,14 +3,218 @@ import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '../api';
 import { useTelegram } from '../hooks/useTelegram';
 import { CourierMissionsResponse } from '../shared-types';
-import { Lock, Check, Zap, Activity } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Lock, Check, Zap } from 'lucide-react';
+import { motion, useAnimationControls } from 'framer-motion';
 import confetti from 'canvas-confetti';
+type Mission = CourierMissionsResponse['missions'][number];
+
+// Telegram error-pattern haptic (no-op outside the WebView / in browser mock).
+function triggerErrorHaptic() {
+  try {
+    (window as any).Telegram?.WebApp?.HapticFeedback?.notificationOccurred?.('error');
+  } catch {
+    /* haptics unsupported — ignore */
+  }
+}
+
+const getStatusBadge = (status: string) => {
+  switch (status) {
+    case 'COMPLETED':
+      return (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-space-green text-[#0A1628]">
+          <span>Завершена</span>
+        </span>
+      );
+    case 'ACTIVE':
+      return (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-space-blue text-[#0A1628]">
+          <span>Активна</span>
+        </span>
+      );
+    case 'LOCKED':
+    default:
+      return (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-semibold bg-white/10 text-space-gray">
+          <span>Заблокирована</span>
+        </span>
+      );
+  }
+};
+
+const getMissionIcon = (status: string) => {
+  switch (status) {
+    case 'COMPLETED':
+      return (
+        <div className="p-2 bg-space-green/10 rounded-lg text-space-green">
+          <Check className="w-4 h-4" />
+        </div>
+      );
+    case 'ACTIVE':
+      return (
+        <div className="p-2 bg-space-blue/10 rounded-lg text-space-blue animate-pulse">
+          <Zap className="w-4 h-4" />
+        </div>
+      );
+    case 'LOCKED':
+    default:
+      return (
+        <div className="p-2 bg-white/5 rounded-lg text-space-gray/50">
+          <Lock className="w-4 h-4" />
+        </div>
+      );
+  }
+};
+
+const getMissionTitle = (stage: number) => {
+  switch (stage) {
+    case 1: return 'Запуск';
+    case 2: return 'Орбита';
+    case 3: return 'Гиперпрыжок';
+    default: return `Миссия Этап ${stage}`;
+  }
+};
+
+const getMissionCondition = (stage: number) => {
+  switch (stage) {
+    case 1: return 'пройти регистрацию и выполнить первые 20 заказов';
+    case 2: return 'выполнить 40 поездок за 4 дня';
+    case 3: return 'удерживать рейтинг 4.8+ и выполнить 60 заказов за неделю';
+    default: return '';
+  }
+};
+
+interface MissionCardProps {
+  mission: Mission;
+  isExpanded: boolean;
+  onToggleExpand: () => void;
+}
+
+function MissionCard({ mission, isExpanded, onToggleExpand }: MissionCardProps) {
+  // Per-card imperative controls: controls.start() re-runs every call, so a
+  // locked card shakes again on every tap (React state-diffing would bail on a
+  // repeat tap with the same value and the animation would silently not restart).
+  const shakeControls = useAnimationControls();
+
+  const isLocked = mission.status === 'LOCKED';
+  const isActive = mission.status === 'ACTIVE';
+  const isCompleted = mission.status === 'COMPLETED';
+  const pct = Math.min(100, (mission.progress / mission.target) * 100);
+
+  const handleClick = () => {
+    if (isLocked) {
+      // Natural damped left-right shake + Telegram "error" haptic.
+      shakeControls.start({
+        x: [0, -8, 8, -6, 6, -3, 0],
+        transition: { duration: 0.45, ease: 'easeInOut' },
+      });
+      triggerErrorHaptic();
+      return;
+    }
+    onToggleExpand();
+  };
+
+  return (
+    <motion.div
+      initial={false}
+      animate={shakeControls}
+      onClick={handleClick}
+      className={`w-full max-w-sm glass-card relative overflow-hidden bg-gradient-to-br from-white/[0.03] to-white/[0.01] cursor-pointer transition-shadow duration-300 ${
+        isLocked ? 'opacity-50' : ''
+      } ${
+        isActive ? 'shadow-[0_0_20px_rgba(0,163,255,0.12)] border-space-blue/30' : ''
+      } ${
+        isCompleted ? 'border-space-green/20' : ''
+      }`}
+    >
+
+      {/* WalletCard shine effect inside active items */}
+      {!isLocked && <div className="wallet-card-overlay" />}
+
+      <div className="p-5 flex items-start space-x-4 relative z-10">
+        <div className="flex-shrink-0">{getMissionIcon(mission.status)}</div>
+
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between">
+            <span className="text-[9px] font-bold text-space-gray uppercase tracking-wider">
+              Этап {mission.stage}
+            </span>
+            {getStatusBadge(mission.status)}
+          </div>
+
+          <h3 className="font-bold text-sm text-white/95 leading-tight mt-1">
+            {getMissionTitle(mission.stage)}
+          </h3>
+
+          {/* Expandable Accordion content */}
+          <motion.div
+            initial={false}
+            animate={{ height: isExpanded ? 'auto' : 0, opacity: isExpanded ? 1 : 0 }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            className="overflow-hidden space-y-3"
+          >
+            <div className="pt-3">
+              <p className="text-[10px] text-space-gray/90 leading-relaxed">
+                <span className="font-semibold text-white/70">Условие:</span> {getMissionCondition(mission.stage)}
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-1.5">
+              <span className="text-[9px] font-semibold bg-white/10 px-2.5 py-0.5 rounded-full text-white/90">
+                Награда: {mission.reward}
+              </span>
+              {mission.deadlineDays && (
+                <span className="text-[9px] font-semibold bg-white/10 px-2.5 py-0.5 rounded-full text-white/90">
+                  Срок: {mission.deadlineDays} дн.
+                </span>
+              )}
+            </div>
+
+            {!isLocked && (
+              <div className="pt-2">
+                <div className="flex justify-between text-[10px] text-space-gray mb-1.5 font-medium">
+                  <span>Прогресс миссии</span>
+                  <span>{mission.progress} / {mission.target}</span>
+                </div>
+                <div className="h-1 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                  <div
+                    style={{ width: `${pct}%` }}
+                    className={`h-full rounded-full transition-all duration-500 ${
+                      isCompleted ? 'bg-space-green' : 'bg-space-blue'
+                    }`}
+                  />
+                </div>
+              </div>
+            )}
+
+            {isCompleted && (
+              <p className="text-[9px] text-space-green font-semibold mt-1">
+                Завершено: {new Date(mission.updatedAt).toLocaleDateString('ru-RU')}
+              </p>
+            )}
+          </motion.div>
+
+          {isLocked && (
+            <div className="text-[10px] text-space-gray/50 italic mt-1.5 flex items-center space-x-1">
+              <Lock className="w-3 h-3" />
+              <span>Заверши предыдущую миссию</span>
+            </div>
+          )}
+
+          {!isExpanded && !isLocked && (
+            <p className="text-[9px] text-space-blue font-semibold mt-1.5">
+              Нажмите, чтобы открыть
+            </p>
+          )}
+        </div>
+      </div>
+
+    </motion.div>
+  );
+}
 
 export default function Missions({ active }: { active?: boolean }) {
   const { initData } = useTelegram();
   const [expandedStage, setExpandedStage] = React.useState<number | null>(1);
-  const [shakingStage, setShakingStage] = React.useState<number | null>(null);
 
   const { data, isLoading, error } = useQuery<CourierMissionsResponse>({
     queryKey: ['missions', initData],
@@ -97,77 +301,11 @@ export default function Missions({ active }: { active?: boolean }) {
     );
   }
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'COMPLETED':
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-space-green text-[#0A1628]">
-            <span>Завершена</span>
-          </span>
-        );
-      case 'ACTIVE':
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-space-blue text-[#0A1628]">
-            <span>Активна</span>
-          </span>
-        );
-      case 'LOCKED':
-      default:
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-semibold bg-white/10 text-space-gray">
-            <span>Заблокирована</span>
-          </span>
-        );
-    }
-  };
-
-  const getMissionIcon = (status: string) => {
-    switch (status) {
-      case 'COMPLETED':
-        return (
-          <div className="p-2 bg-space-green/10 rounded-lg text-space-green">
-            <Check className="w-4 h-4" />
-          </div>
-        );
-      case 'ACTIVE':
-        return (
-          <div className="p-2 bg-space-blue/10 rounded-lg text-space-blue animate-pulse">
-            <Zap className="w-4 h-4" />
-          </div>
-        );
-      case 'LOCKED':
-      default:
-        return (
-          <div className="p-2 bg-white/5 rounded-lg text-space-gray/50">
-            <Lock className="w-4 h-4" />
-          </div>
-        );
-    }
-  };
-
-  const getMissionTitle = (stage: number) => {
-    switch (stage) {
-      case 1: return 'Запуск';
-      case 2: return 'Орбита';
-      case 3: return 'Гиперпрыжок';
-      default: return `Миссия Этап ${stage}`;
-    }
-  };
-
-  const getMissionCondition = (stage: number) => {
-    switch (stage) {
-      case 1: return 'пройти регистрацию и выполнить первые 20 заказов';
-      case 2: return 'выполнить 40 поездок за 4 дня';
-      case 3: return 'удерживать рейтинг 4.8+ и выполнить 60 заказов за неделю';
-      default: return '';
-    }
-  };
-
   const completedCount = data.missions.filter(m => m.status === 'COMPLETED').length;
 
   return (
     <div className="px-4 py-3 space-y-6 font-sans">
-      
+
       <div className="text-center space-y-1">
         <h1 className="text-xl font-bold tracking-tight text-white">
           Миссии — First Flight
@@ -177,131 +315,18 @@ export default function Missions({ active }: { active?: boolean }) {
         </div>
       </div>
 
-      <div className="relative flex flex-col items-center space-y-5">
-        
-        {/* Simple elegant vertical line */}
-        <div className="absolute top-10 bottom-10 w-[1px] bg-white/5 -z-10" />
+      <div className="flex flex-col items-center space-y-5">
 
-        {data.missions.map((mission, index) => {
-          const isLocked = mission.status === 'LOCKED';
-          const isActive = mission.status === 'ACTIVE';
-          const isCompleted = mission.status === 'COMPLETED';
-          const isExpanded = expandedStage === mission.stage;
-          const pct = Math.min(100, (mission.progress / mission.target) * 100);
-
-          const handleNodeClick = () => {
-            if (isLocked) {
-              setShakingStage(mission.stage);
-              setTimeout(() => setShakingStage(null), 400);
-              return;
+        {data.missions.map((mission) => (
+          <MissionCard
+            key={mission.id}
+            mission={mission}
+            isExpanded={expandedStage === mission.stage}
+            onToggleExpand={() =>
+              setExpandedStage(prev => (prev === mission.stage ? null : mission.stage))
             }
-            setExpandedStage(isExpanded ? null : mission.stage);
-          };
-
-          return (
-            <motion.div
-              key={mission.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={
-                shakingStage === mission.stage 
-                  ? { x: [-4, 4, -4, 4, -2, 2, 0], transition: { duration: 0.4 } } 
-                  : { opacity: 1, y: 0 }
-              }
-              transition={{ delay: index * 0.1 }}
-              onClick={handleNodeClick}
-              className={`w-full max-w-sm glass-card relative overflow-hidden bg-gradient-to-br from-white/[0.03] to-white/[0.01] cursor-pointer transition-shadow duration-300 ${
-                isLocked ? 'opacity-50' : ''
-              } ${
-                isActive ? 'shadow-[0_0_20px_rgba(0,163,255,0.12)] border-space-blue/30' : ''
-              } ${
-                isCompleted ? 'border-space-green/20' : ''
-              }`}
-            >
-              
-              {/* WalletCard shine effect inside active items */}
-              {!isLocked && <div className="wallet-card-overlay" />}
-
-              <div className="p-5 flex items-start space-x-4 relative z-10">
-                <div className="flex-shrink-0">{getMissionIcon(mission.status)}</div>
-                
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[9px] font-bold text-space-gray uppercase tracking-wider">
-                      Этап {mission.stage}
-                    </span>
-                    {getStatusBadge(mission.status)}
-                  </div>
-                  
-                  <h3 className="font-bold text-sm text-white/95 leading-tight mt-1">
-                    {getMissionTitle(mission.stage)}
-                  </h3>
-
-                  {/* Expandable Accordion content */}
-                  <motion.div
-                    initial={false}
-                    animate={{ height: isExpanded ? 'auto' : 0, opacity: isExpanded ? 1 : 0 }}
-                    transition={{ duration: 0.25, ease: 'easeInOut' }}
-                    className="overflow-hidden space-y-3"
-                  >
-                    <div className="pt-3">
-                      <p className="text-[10px] text-space-gray/90 leading-relaxed">
-                        <span className="font-semibold text-white/70">Условие:</span> {getMissionCondition(mission.stage)}
-                      </p>
-                    </div>
-
-                    <div className="flex flex-wrap gap-1.5">
-                      <span className="text-[9px] font-semibold bg-white/10 px-2.5 py-0.5 rounded-full text-white/90">
-                        Награда: {mission.reward}
-                      </span>
-                      {mission.deadlineDays && (
-                        <span className="text-[9px] font-semibold bg-white/10 px-2.5 py-0.5 rounded-full text-white/90">
-                          Срок: {mission.deadlineDays} дн.
-                        </span>
-                      )}
-                    </div>
-
-                    {!isLocked && (
-                      <div className="pt-2">
-                        <div className="flex justify-between text-[10px] text-space-gray mb-1.5 font-medium">
-                          <span>Прогресс миссии</span>
-                          <span>{mission.progress} / {mission.target}</span>
-                        </div>
-                        <div className="h-1 bg-white/5 rounded-full overflow-hidden border border-white/5">
-                          <div 
-                            style={{ width: `${pct}%` }}
-                            className={`h-full rounded-full transition-all duration-500 ${
-                              isCompleted ? 'bg-space-green' : 'bg-space-blue'
-                            }`}
-                          />
-                        </div>
-                      </div>
-                    )}
-
-                    {isCompleted && (
-                      <p className="text-[9px] text-space-green font-semibold mt-1">
-                        Завершено: {new Date(mission.updatedAt).toLocaleDateString('ru-RU')}
-                      </p>
-                    )}
-                  </motion.div>
-
-                  {isLocked && (
-                    <div className="text-[10px] text-space-gray/50 italic mt-1.5 flex items-center space-x-1">
-                      <Lock className="w-3 h-3" />
-                      <span>Заверши предыдущую миссию</span>
-                    </div>
-                  )}
-
-                  {!isExpanded && !isLocked && (
-                    <p className="text-[9px] text-space-blue font-semibold mt-1.5">
-                      Нажмите, чтобы открыть
-                    </p>
-                  )}
-                </div>
-              </div>
-
-            </motion.div>
-          );
-        })}
+          />
+        ))}
       </div>
     </div>
   );
