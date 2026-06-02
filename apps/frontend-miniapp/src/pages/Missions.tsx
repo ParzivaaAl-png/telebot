@@ -7,7 +7,7 @@ import { Lock, Check, Zap, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 
-export default function Missions() {
+export default function Missions({ active }: { active?: boolean }) {
   const { initData } = useTelegram();
   const [expandedStage, setExpandedStage] = React.useState<number | null>(1);
   const [shakingStage, setShakingStage] = React.useState<number | null>(null);
@@ -19,9 +19,9 @@ export default function Missions() {
     enabled: !!initData,
   });
 
-  // Launch confetti if the driver has completed missions
+  // Launch confetti if the driver has completed missions and the tab is actively viewed
   useEffect(() => {
-    if (data?.missions) {
+    if (active && data?.missions) {
       const hasCompleted = data.missions.some(m => m.status === 'COMPLETED');
       if (hasCompleted) {
         confetti({
@@ -33,9 +33,9 @@ export default function Missions() {
       }
 
       // Auto-expand the active mission or the first uncompleted one
-      const active = data.missions.find(m => m.status === 'ACTIVE');
-      if (active) {
-        setExpandedStage(active.stage);
+      const activeMission = data.missions.find(m => m.status === 'ACTIVE');
+      if (activeMission) {
+        setExpandedStage(activeMission.stage);
       } else {
         const completedCount = data.missions.filter(m => m.status === 'COMPLETED').length;
         if (completedCount === 3) {
@@ -45,7 +45,7 @@ export default function Missions() {
         }
       }
     }
-  }, [data]);
+  }, [data, active]);
 
   if (isLoading) {
     return (

@@ -7,7 +7,7 @@ import { CourierNotificationsResponse } from '../shared-types';
 import { Bell, Check, Award, AlertTriangle, Play, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export default function Notifications() {
+export default function Notifications({ active }: { active?: boolean }) {
   const { initData } = useTelegram();
   const { setUnreadCount } = useAppStore();
   const queryClient = useQueryClient();
@@ -28,11 +28,11 @@ export default function Notifications() {
   });
 
   useEffect(() => {
-    // When opened, mark all notifications as read
-    if (data?.notifications && data.notifications.some(n => !n.isRead)) {
+    // When opened, mark all notifications as read (only if active)
+    if (active && data?.notifications && data.notifications.some(n => !n.isRead)) {
       readMutation.mutate();
     }
-  }, [data]);
+  }, [data, active]);
 
   // Update unread count badge
   useEffect(() => {

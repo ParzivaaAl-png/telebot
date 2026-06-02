@@ -6,7 +6,7 @@ import Missions from './pages/Missions';
 import StarMap from './pages/StarMap';
 import Notifications from './pages/Notifications';
 import { Compass, Rocket, Star, Bell } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,6 +19,7 @@ const queryClient = new QueryClient({
 
 export default function App() {
   const { activeTab, setActiveTab, unreadCount } = useAppStore();
+
   const renderActiveScreen = () => {
     switch (activeTab) {
       case 'dashboard':
@@ -50,14 +51,28 @@ export default function App() {
           </span>
         </header>
 
-        {/* Content Area */}
-        <main className="flex-grow relative z-10">
-          {renderActiveScreen()}
+        {/* Content Area - Seamless AnimatePresence popLayout Transition */}
+        <main className="flex-grow relative z-10 min-h-[70vh]">
+          <AnimatePresence mode="popLayout">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.22, ease: [0.25, 0.8, 0.25, 1] }}
+              className="w-full h-full"
+            >
+              {renderActiveScreen()}
+            </motion.div>
+          </AnimatePresence>
         </main>
 
-        {/* Bottom Tab Bar — floating capsule above Home Indicator */}
-        <nav className="fixed bottom-0 left-0 right-0 z-40 max-w-md mx-auto px-4" style={{ paddingBottom: 'calc(8px + env(safe-area-inset-bottom, 8px))' }}>
-          <div className="bg-[#1A2235]/85 backdrop-blur-[24px] rounded-2xl px-2 py-1.5 flex justify-around shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+        {/* Bottom Tab Bar — floating capsule raised above Home Indicator using a completely stable absolute bottom offset */}
+        <nav 
+          className="fixed left-0 right-0 z-40 max-w-md mx-auto px-4" 
+          style={{ bottom: 'calc(16px + env(safe-area-inset-bottom, 8px))' }}
+        >
+          <div className="bg-[#0A1628]/45 border border-white/[0.08] backdrop-blur-[32px] rounded-full px-3 py-2 flex justify-around shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
           
             {/* Tab 1: Dashboard */}
             <button
@@ -67,7 +82,7 @@ export default function App() {
               {activeTab === 'dashboard' && (
                 <motion.div
                   layoutId="active-nav-pill"
-                  className="absolute inset-0 bg-white/10 rounded-xl -z-10"
+                  className="absolute inset-0 bg-white/10 rounded-full -z-10"
                   transition={{ type: 'spring', stiffness: 380, damping: 28 }}
                 />
               )}
@@ -85,7 +100,7 @@ export default function App() {
               {activeTab === 'missions' && (
                 <motion.div
                   layoutId="active-nav-pill"
-                  className="absolute inset-0 bg-white/10 rounded-xl -z-10"
+                  className="absolute inset-0 bg-white/10 rounded-full -z-10"
                   transition={{ type: 'spring', stiffness: 380, damping: 28 }}
                 />
               )}
@@ -103,7 +118,7 @@ export default function App() {
               {activeTab === 'starmap' && (
                 <motion.div
                   layoutId="active-nav-pill"
-                  className="absolute inset-0 bg-white/10 rounded-xl -z-10"
+                  className="absolute inset-0 bg-white/10 rounded-full -z-10"
                   transition={{ type: 'spring', stiffness: 380, damping: 28 }}
                 />
               )}
@@ -121,7 +136,7 @@ export default function App() {
               {activeTab === 'notifications' && (
                 <motion.div
                   layoutId="active-nav-pill"
-                  className="absolute inset-0 bg-white/10 rounded-xl -z-10"
+                  className="absolute inset-0 bg-white/10 rounded-full -z-10"
                   transition={{ type: 'spring', stiffness: 380, damping: 28 }}
                 />
               )}
