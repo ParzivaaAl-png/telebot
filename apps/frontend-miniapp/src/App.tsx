@@ -6,7 +6,7 @@ import Missions from './pages/Missions';
 import StarMap from './pages/StarMap';
 import Notifications from './pages/Notifications';
 import { Compass, Rocket, Star, Bell } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -51,20 +51,20 @@ export default function App() {
           </span>
         </header>
 
-        {/* Content Area - Seamless AnimatePresence popLayout Transition */}
+        {/* Content Area — single-section enter animation. popLayout forced BOTH
+            the outgoing and incoming pages to render + animate simultaneously,
+            which stutters on phones; here only the incoming section mounts and
+            fades/slides in. */}
         <main className="flex-grow relative z-10 min-h-[70vh]">
-          <AnimatePresence mode="popLayout">
-            <motion.div
-              key={activeTab}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.22, ease: [0.25, 0.8, 0.25, 1] }}
-              className="w-full h-full"
-            >
-              {renderActiveScreen()}
-            </motion.div>
-          </AnimatePresence>
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2, ease: [0.25, 0.8, 0.25, 1] }}
+            className="w-full h-full"
+          >
+            {renderActiveScreen()}
+          </motion.div>
         </main>
 
         {/* Bottom Tab Bar — floating capsule raised above Home Indicator using a completely stable absolute bottom offset */}
@@ -72,7 +72,7 @@ export default function App() {
           className="fixed left-0 right-0 z-40 max-w-md mx-auto px-4" 
           style={{ bottom: 'calc(16px + env(safe-area-inset-bottom, 8px))' }}
         >
-          <div className="bg-[#0A1628]/45 border border-white/[0.08] backdrop-blur-[32px] rounded-full px-3 py-2 flex justify-around shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
+          <div className="bg-[#0A1628]/60 border border-white/[0.08] backdrop-blur-[16px] rounded-full px-3 py-2 flex justify-around shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
             {/* Tab 1: Dashboard */}
             <button
               onClick={() => setActiveTab('dashboard')}
