@@ -19,8 +19,20 @@ const queryClient = new QueryClient({
 
 export default function App() {
   const { activeTab, setActiveTab, unreadCount } = useAppStore();
-
-
+  const renderActiveScreen = () => {
+    switch (activeTab) {
+      case 'dashboard':
+        return <Dashboard />;
+      case 'missions':
+        return <Missions />;
+      case 'starmap':
+        return <StarMap />;
+      case 'notifications':
+        return <Notifications />;
+      default:
+        return <Dashboard />;
+    }
+  };
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -51,18 +63,7 @@ export default function App() {
 
         {/* Content Area */}
         <main className="flex-grow relative z-10">
-          <div className={activeTab === 'dashboard' ? 'block' : 'hidden'}>
-            <Dashboard />
-          </div>
-          <div className={activeTab === 'missions' ? 'block' : 'hidden'}>
-            <Missions />
-          </div>
-          <div className={activeTab === 'starmap' ? 'block' : 'hidden'}>
-            <StarMap />
-          </div>
-          <div className={activeTab === 'notifications' ? 'block' : 'hidden'}>
-            <Notifications />
-          </div>
+          {renderActiveScreen()}
         </main>
 
         {/* Bottom Tab Bar */}
