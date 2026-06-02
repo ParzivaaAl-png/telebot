@@ -44,11 +44,26 @@ export default function Notifications() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[70vh]">
-        <Activity className="w-8 h-8 text-space-green animate-spin" />
-        <span className="mt-4 text-space-gray text-xs tracking-wide animate-pulse">
-          Синхронизация журнала...
-        </span>
+      <div className="px-4 py-3 space-y-6 font-sans text-white">
+        <div className="text-center space-y-2">
+          <div className="h-5 w-32 rounded skeleton-shimmer mx-auto" />
+          <div className="h-3 w-56 rounded skeleton-shimmer mx-auto" />
+        </div>
+
+        <div className="space-y-2.5">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="ios-notification flex items-start space-x-3.5 p-4">
+              <div className="w-8 h-8 rounded-full skeleton-shimmer flex-shrink-0" />
+              <div className="flex-1 space-y-2">
+                <div className="flex justify-between items-start">
+                  <div className="h-3 w-28 rounded skeleton-shimmer" />
+                  <div className="h-2 w-10 rounded skeleton-shimmer" />
+                </div>
+                <div className="h-2.5 w-full rounded skeleton-shimmer" />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

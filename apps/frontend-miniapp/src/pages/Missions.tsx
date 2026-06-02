@@ -34,11 +34,37 @@ export default function Missions() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[70vh]">
-        <Activity className="w-8 h-8 text-space-purple animate-spin" />
-        <span className="mt-4 text-space-gray text-xs tracking-wide animate-pulse">
-          Загрузка списка миссий...
-        </span>
+      <div className="px-4 py-3 space-y-6 font-sans">
+        <div className="text-center space-y-2">
+          <div className="h-5 w-32 rounded skeleton-shimmer mx-auto" />
+          <div className="h-3 w-56 rounded skeleton-shimmer mx-auto" />
+        </div>
+
+        <div className="relative flex flex-col items-center space-y-5">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="w-full max-w-sm glass-card p-5 flex items-start space-x-4">
+              <div className="w-9 h-9 rounded-lg skeleton-shimmer flex-shrink-0" />
+              <div className="flex-1 space-y-3.5">
+                <div className="flex justify-between items-center">
+                  <div className="h-2.5 w-12 rounded skeleton-shimmer" />
+                  <div className="h-4.5 w-16 rounded-full skeleton-shimmer" />
+                </div>
+                <div className="h-3.5 w-36 rounded skeleton-shimmer" />
+                <div className="flex space-x-2">
+                  <div className="h-4 w-24 rounded-full skeleton-shimmer" />
+                  <div className="h-4 w-16 rounded-full skeleton-shimmer" />
+                </div>
+                <div className="space-y-2 pt-2 border-t border-white/5">
+                  <div className="flex justify-between">
+                    <div className="h-2 w-20 rounded skeleton-shimmer" />
+                    <div className="h-2 w-8 rounded skeleton-shimmer" />
+                  </div>
+                  <div className="h-1 w-full rounded-full skeleton-shimmer" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

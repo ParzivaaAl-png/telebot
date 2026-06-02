@@ -79,7 +79,7 @@ export default function App() {
             {activeTab === 'dashboard' && (
               <motion.div
                 layoutId="active-nav-dot"
-                className="absolute bottom-0 w-1 h-1 rounded-full bg-space-blue shadow-glow-blue"
+                className="absolute bottom-0 w-1 h-1 rounded-full bg-space-blue"
                 transition={{ type: 'spring', stiffness: 350, damping: 25 }}
               />
             )}
@@ -99,7 +99,7 @@ export default function App() {
             {activeTab === 'missions' && (
               <motion.div
                 layoutId="active-nav-dot"
-                className="absolute bottom-0 w-1 h-1 rounded-full bg-space-purple shadow-glow-purple"
+                className="absolute bottom-0 w-1 h-1 rounded-full bg-space-purple"
                 transition={{ type: 'spring', stiffness: 350, damping: 25 }}
               />
             )}
@@ -119,7 +119,7 @@ export default function App() {
             {activeTab === 'starmap' && (
               <motion.div
                 layoutId="active-nav-dot"
-                className="absolute bottom-0 w-1 h-1 rounded-full bg-space-blue shadow-glow-blue"
+                className="absolute bottom-0 w-1 h-1 rounded-full bg-space-blue"
                 transition={{ type: 'spring', stiffness: 350, damping: 25 }}
               />
             )}
@@ -144,7 +144,7 @@ export default function App() {
             {activeTab === 'notifications' && (
               <motion.div
                 layoutId="active-nav-dot"
-                className="absolute bottom-0 w-1 h-1 rounded-full bg-space-green shadow-glow-green"
+                className="absolute bottom-0 w-1 h-1 rounded-full bg-space-green"
                 transition={{ type: 'spring', stiffness: 350, damping: 25 }}
               />
             )}

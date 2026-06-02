@@ -27,11 +27,91 @@ export default function Dashboard() {
 
   if (isMeLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[70vh]">
-        <Activity className="w-8 h-8 text-space-blue animate-spin" />
-        <span className="mt-4 text-space-gray text-xs tracking-wide animate-pulse">
-          Загрузка консоли пилота...
-        </span>
+      <div className="space-y-6 px-4 py-4 font-sans text-white">
+        {/* 1. Wallet-like Card Skeleton */}
+        <div className="glass-card p-5 bg-gradient-to-br from-white/[0.03] to-white/[0.01] space-y-6 relative overflow-hidden">
+          {/* Avatar and name section */}
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 rounded-full skeleton-shimmer flex-shrink-0" />
+            <div className="space-y-2 flex-1">
+              <div className="h-4 w-32 rounded skeleton-shimmer" />
+              <div className="h-3.5 w-20 rounded-full skeleton-shimmer" />
+            </div>
+          </div>
+          
+          {/* Telemetry section */}
+          <div className="grid grid-cols-3 gap-2 pt-4 border-t border-white/5">
+            <div className="space-y-2">
+              <div className="h-2 w-10 rounded skeleton-shimmer" />
+              <div className="h-3.5 w-16 rounded skeleton-shimmer" />
+            </div>
+            <div className="border-l border-white/5 pl-3 space-y-2">
+              <div className="h-2 w-10 rounded skeleton-shimmer" />
+              <div className="h-3.5 w-12 rounded skeleton-shimmer" />
+            </div>
+            <div className="border-l border-white/5 pl-3 space-y-2">
+              <div className="h-2 w-10 rounded skeleton-shimmer" />
+              <div className="h-3.5 w-12 rounded skeleton-shimmer" />
+            </div>
+          </div>
+
+          {/* Main metrics section */}
+          <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/5">
+            <div className="space-y-2">
+              <div className="h-2 w-20 rounded skeleton-shimmer" />
+              <div className="h-7 w-12 rounded skeleton-shimmer" />
+            </div>
+            <div className="space-y-2">
+              <div className="h-2 w-20 rounded skeleton-shimmer" />
+              <div className="h-7 w-16 rounded skeleton-shimmer" />
+            </div>
+          </div>
+
+          {/* Progress bar section */}
+          <div className="space-y-2 pt-2">
+            <div className="flex justify-between">
+              <div className="h-2 w-36 rounded skeleton-shimmer" />
+              <div className="h-2 w-10 rounded skeleton-shimmer" />
+            </div>
+            <div className="h-1.5 w-full rounded-full skeleton-shimmer" />
+            <div className="h-2 w-48 rounded skeleton-shimmer ml-auto" />
+          </div>
+        </div>
+
+        {/* 2. Categories Skeleton */}
+        <div className="space-y-3">
+          <div className="h-3 w-16 rounded skeleton-shimmer px-1" />
+          <div className="grid grid-cols-3 gap-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="glass-card p-4 flex flex-col items-center justify-center space-y-3">
+                <div className="w-10 h-10 rounded-full skeleton-shimmer" />
+                <div className="h-2.5 w-12 rounded skeleton-shimmer" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 3. Notifications Skeleton */}
+        <div className="space-y-3">
+          <div className="flex justify-between px-1">
+            <div className="h-3 w-32 rounded skeleton-shimmer" />
+            <div className="h-3 w-16 rounded skeleton-shimmer" />
+          </div>
+          <div className="space-y-2">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="ios-notification flex items-center space-x-3.5 p-4">
+                <div className="w-8 h-8 rounded-full skeleton-shimmer flex-shrink-0" />
+                <div className="flex-1 space-y-2">
+                  <div className="flex justify-between">
+                    <div className="h-3 w-24 rounded skeleton-shimmer" />
+                    <div className="h-2 w-12 rounded skeleton-shimmer" />
+                  </div>
+                  <div className="h-2.5 w-full rounded skeleton-shimmer" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
@@ -160,7 +240,7 @@ export default function Dashboard() {
             <div className="text-space-gray text-[9px] font-medium tracking-wide uppercase">
               Сегодня
             </div>
-            <div className="text-xs font-bold text-space-blue mt-1">
+            <div className="text-xs font-bold text-white mt-1">
               {tele.today} <span className="text-[10px] text-space-gray/80 font-normal">зак.</span>
             </div>
           </div>
@@ -169,7 +249,7 @@ export default function Dashboard() {
             <div className="text-space-gray text-[9px] font-medium tracking-wide uppercase">
               Неделя
             </div>
-            <div className="text-xs font-bold text-space-purple mt-1">
+            <div className="text-xs font-bold text-white mt-1">
               {tele.week} <span className="text-[10px] text-space-gray/80 font-normal">зак.</span>
             </div>
           </div>
@@ -189,7 +269,7 @@ export default function Dashboard() {
             <div className="text-space-gray text-[10px] font-semibold uppercase tracking-wider">
               Рейтинг пилота
             </div>
-            <div className="text-2xl font-black mt-0.5 flex items-center space-x-1.5 text-space-green tracking-tight">
+            <div className="text-2xl font-black mt-0.5 flex items-center space-x-1.5 text-white tracking-tight">
               <span>{courier.rating.toFixed(2)}</span>
               <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
             </div>
@@ -216,7 +296,7 @@ export default function Dashboard() {
           </div>
           {nextRank && (
             <div className="text-[9px] text-space-gray/80 mt-1.5 text-right font-medium">
-              До звания {getRankConfig(nextRank).name} осталось: <span className="text-space-blue font-bold">{ordersToNextRank} заказов</span>
+              До звания {getRankConfig(nextRank).name} осталось: <span className="text-white font-bold">{ordersToNextRank} заказов</span>
             </div>
           )}
         </div>

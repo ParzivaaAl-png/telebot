@@ -18,11 +18,46 @@ export default function StarMap() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[70vh]">
-        <Activity className="w-8 h-8 text-space-blue animate-spin" />
-        <span className="mt-4 text-space-gray text-xs tracking-wide animate-pulse">
-          Загрузка звездной карты...
-        </span>
+      <div className="px-4 py-3 space-y-6 font-sans text-white">
+        <div className="text-center space-y-2">
+          <div className="h-5 w-36 rounded skeleton-shimmer mx-auto" />
+          <div className="h-3 w-56 rounded skeleton-shimmer mx-auto" />
+        </div>
+
+        {/* Ring skeleton */}
+        <div className="glass-card p-6 flex flex-col items-center relative overflow-hidden">
+          <div className="w-52 h-52 rounded-full border-[10px] border-white/5 flex items-center justify-center relative">
+            <div className="flex flex-col items-center space-y-2">
+              <div className="w-8 h-8 rounded-full skeleton-shimmer" />
+              <div className="h-6 w-24 rounded skeleton-shimmer" />
+              <div className="h-2 w-12 rounded skeleton-shimmer" />
+            </div>
+          </div>
+
+          <div className="w-full text-center mt-5 border-t border-white/5 pt-4 space-y-2">
+            <div className="h-3 w-40 rounded skeleton-shimmer mx-auto" />
+            <div className="h-2.5 w-32 rounded skeleton-shimmer mx-auto" />
+          </div>
+        </div>
+
+        {/* History list skeleton */}
+        <div className="space-y-2.5">
+          <div className="h-3 w-28 rounded skeleton-shimmer px-1" />
+          <div className="glass-card divide-y divide-white/5">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="flex justify-between items-center p-4">
+                <div className="flex items-center space-x-3.5">
+                  <div className="w-8 h-8 rounded-lg skeleton-shimmer flex-shrink-0" />
+                  <div className="space-y-2">
+                    <div className="h-3 w-24 rounded skeleton-shimmer" />
+                    <div className="h-2.5 w-16 rounded skeleton-shimmer" />
+                  </div>
+                </div>
+                <div className="h-4 w-12 rounded skeleton-shimmer" />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
@@ -118,7 +153,7 @@ export default function StarMap() {
           </div>
           {remaining > 0 ? (
             <p className="text-[10px] text-space-gray">
-              Осталось сделать <span className="text-space-blue font-bold">{remaining}</span> заказов до завершения цикла
+              Осталось сделать <span className="text-white font-bold">{remaining}</span> заказов до завершения цикла
             </p>
           ) : (
             <p className="text-[10px] text-space-green font-semibold animate-pulse">
