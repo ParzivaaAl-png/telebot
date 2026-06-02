@@ -5,15 +5,59 @@
 @layer base {
   body {
     background-color: #0A1628;
-    background-image: 
-      radial-gradient(circle at 10% 20%, rgba(0, 163, 255, 0.08) 0%, transparent 50%),
-      radial-gradient(circle at 90% 85%, rgba(123, 97, 255, 0.08) 0%, transparent 50%);
     background-attachment: fixed;
     color: #FFFFFF;
     -webkit-tap-highlight-color: transparent;
   }
 }
 
+/* Deep Space Starfield Background */
+.hud-stars {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -2;
+  background-image: 
+    radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 75px 120px, rgba(255,255,255,0.7), rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 150px 50px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 220px 180px, rgba(0, 163, 255, 0.4), rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 280px 80px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 310px 250px, rgba(123, 97, 255, 0.4), rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 450px 120px, #ffffff, rgba(0,0,0,0));
+  background-repeat: repeat;
+  background-size: 350px 350px;
+  opacity: 0.35;
+}
+
+/* Cockpit Coordinate Grid Overlay */
+.hud-grid {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image: 
+    linear-gradient(rgba(0, 163, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 163, 255, 0.04) 1px, transparent 1px);
+  background-size: 25px 25px;
+  background-position: center;
+  mask-image: radial-gradient(ellipse at center, black 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 80%);
+  opacity: 0.85;
+}
+
+/* Central cockpit ambient glow */
+.hud-ambient-glow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -3;
+  background: 
+    radial-gradient(circle at 50% 40%, rgba(0, 163, 255, 0.09) 0%, transparent 50%),
+    radial-gradient(circle at 50% 90%, rgba(123, 97, 255, 0.06) 0%, transparent 60%);
+}
+
+/* Glass card styling (legacy fallback) */
 .glass-card {
   background: rgba(13, 27, 49, 0.7);
   backdrop-filter: blur(16px);
@@ -30,34 +74,121 @@
   box-shadow: 0 0 20px rgba(0, 163, 255, 0.15);
 }
 
+/* Standard HUD card with angled corners */
+.hud-card-wrapper {
+  position: relative;
+  background: linear-gradient(135deg, rgba(0, 163, 255, 0.35) 0%, rgba(123, 97, 255, 0.15) 50%, rgba(0, 163, 255, 0.1) 100%);
+  padding: 1px;
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+  transition: all 0.3s ease;
+}
+
+.hud-card-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0, 163, 255, 0.6), transparent);
+  pointer-events: none;
+}
+
+.hud-card-content {
+  background: rgba(8, 20, 38, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 1.25rem;
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+}
+
+/* Asymmetric Pilot Card style */
+.hud-pilot-card-wrapper {
+  position: relative;
+  background: linear-gradient(135deg, rgba(0, 163, 255, 0.45) 0%, rgba(123, 97, 255, 0.25) 50%, rgba(0, 163, 255, 0.15) 100%);
+  padding: 1px;
+  clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 72px 100%, 72px calc(100% - 12px), 0 calc(100% - 12px));
+  transition: all 0.3s ease;
+}
+
+.hud-pilot-card-content {
+  background: rgba(6, 17, 34, 0.88);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  padding: 1.25rem;
+  clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 72px 100%, 72px calc(100% - 12px), 0 calc(100% - 12px));
+}
+
+/* Glowing text classes */
 .glow-text-blue {
-  text-shadow: 0 0 12px rgba(0, 163, 255, 0.6);
+  text-shadow: 0 0 10px rgba(0, 163, 255, 0.6), 0 0 20px rgba(0, 163, 255, 0.2);
 }
 
 .glow-text-purple {
-  text-shadow: 0 0 12px rgba(123, 97, 255, 0.6);
+  text-shadow: 0 0 10px rgba(123, 97, 255, 0.6), 0 0 20px rgba(123, 97, 255, 0.2);
 }
 
 .glow-text-green {
-  text-shadow: 0 0 12px rgba(0, 196, 140, 0.6);
+  text-shadow: 0 0 10px rgba(0, 196, 140, 0.6), 0 0 20px rgba(0, 196, 140, 0.2);
 }
 
 .star-glow {
-  filter: drop-shadow(0 0 6px rgba(0, 163, 255, 0.8));
+  filter: drop-shadow(0 0 5px rgba(0, 163, 255, 0.7));
 }
 
-/* Custom scrollbars */
+/* HUD Line details */
+.hud-line-h {
+  height: 1px;
+  background: linear-gradient(90deg, rgba(0, 163, 255, 0.6) 0%, rgba(123, 97, 255, 0.3) 50%, transparent 100%);
+  position: relative;
+}
+
+.hud-line-h::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -2px;
+  width: 5px;
+  height: 5px;
+  background: #00A3FF;
+  box-shadow: 0 0 6px #00A3FF;
+}
+
+/* Pulse / Animation utilities */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.75; }
+  50% { opacity: 1; filter: drop-shadow(0 0 4px rgba(0,163,255,0.4)); }
+}
+.animate-pulse-slow {
+  animation: pulse-slow 3s infinite ease-in-out;
+}
+
+/* Scanline / CRT overlay */
+.hud-scanline {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.2) 50%
+  );
+  background-size: 100% 4px;
+  z-index: 50;
+  opacity: 0.15;
+}
+
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
   background: rgba(10, 22, 40, 0.5);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 163, 255, 0.3);
-  border-radius: 4px;
+  background: rgba(0, 163, 255, 0.25);
+  border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 163, 255, 0.5);
+  background: rgba(0, 163, 255, 0.45);
 }
