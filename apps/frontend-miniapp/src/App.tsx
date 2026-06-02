@@ -50,7 +50,13 @@ export default function App() {
           </span>
         </header>
 
-        {/* Content Area */}
+        {/* Content Area — sections swap instantly. We deliberately do NOT
+            fade/slide this wrapper: animating opacity or transform on an
+            ancestor of the backdrop-filter glass cards makes WebKit (Telegram
+            iOS WebView) re-rasterize every blur in one frame when the tween
+            settles — the exact "blink at the end of the animation" we're
+            killing. Smoothness comes from the per-section load micro-animations
+            (progress fill, activity ring) and the sliding nav pill instead. */}
         <main className="flex-grow relative z-10">
           {renderActiveScreen()}
         </main>

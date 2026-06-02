@@ -59,7 +59,15 @@
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
   border-radius: 20px;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  /* Only transition the properties that actually change (hover/state) — never
+     `all`, which makes the blur re-rasterize on unrelated re-renders.
+     We intentionally do NOT add translateZ(0)/backface-visibility here: pairing
+     a forced transform with overflow:hidden + backdrop-filter on the same node
+     triggers a WebKit blur-clip artifact, and the hint is overridden anyway on
+     cards framer-motion transforms. */
+  transition: background-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .glass-card-hover {
@@ -80,7 +88,7 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.12);
   border-radius: 16px;
-  transition: all 0.25s ease;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
 .ios-notification:hover {

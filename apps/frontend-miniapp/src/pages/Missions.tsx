@@ -182,7 +182,7 @@ export default function Missions() {
         {/* Simple elegant vertical line */}
         <div className="absolute top-10 bottom-10 w-[1px] bg-white/5 -z-10" />
 
-        {data.missions.map((mission, index) => {
+        {data.missions.map((mission) => {
           const isLocked = mission.status === 'LOCKED';
           const isActive = mission.status === 'ACTIVE';
           const isCompleted = mission.status === 'COMPLETED';
@@ -201,13 +201,13 @@ export default function Missions() {
           return (
             <motion.div
               key={mission.id}
-              initial={{ opacity: 0, y: 10 }}
+              initial={false}
               animate={
-                shakingStage === mission.stage 
-                  ? { x: [-4, 4, -4, 4, -2, 2, 0], transition: { duration: 0.4 } } 
-                  : { opacity: 1, y: 0 }
+                shakingStage === mission.stage
+                  ? { x: [-4, 4, -4, 4, -2, 2, 0] }
+                  : { x: 0 }
               }
-              transition={{ delay: index * 0.1 }}
+              transition={{ duration: 0.4 }}
               onClick={handleNodeClick}
               className={`w-full max-w-sm glass-card relative overflow-hidden bg-gradient-to-br from-white/[0.03] to-white/[0.01] cursor-pointer transition-shadow duration-300 ${
                 isLocked ? 'opacity-50' : ''
