@@ -17,15 +17,14 @@ export default {
         }
       },
       fontFamily: {
-        orbitron: ['Orbitron', 'sans-serif'],
-        rajdhani: ['Rajdhani', 'sans-serif'],
-        space: ['Space Grotesk', 'sans-serif'],
-        exo: ['Exo 2', 'sans-serif'],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
       },
       boxShadow: {
-        'glow-blue': '0 0 15px rgba(0, 163, 255, 0.5)',
-        'glow-purple': '0 0 15px rgba(123, 97, 255, 0.5)',
-        'glow-green': '0 0 15px rgba(0, 196, 140, 0.5)',
+        'ios-card': '0 8px 32px 0 rgba(0, 0, 0, 0.3)',
+        'ios-popup': '0 12px 40px 0 rgba(0, 0, 0, 0.4)',
+        'glow-blue': '0 0 12px rgba(0, 163, 255, 0.25)',
+        'glow-purple': '0 0 12px rgba(123, 97, 255, 0.25)',
+        'glow-green': '0 0 12px rgba(0, 196, 140, 0.25)',
       }
     },
   },

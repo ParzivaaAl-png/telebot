@@ -23,8 +23,8 @@ export default function Missions() {
       const hasCompleted = data.missions.some(m => m.status === 'COMPLETED');
       if (hasCompleted) {
         confetti({
-          particleCount: 60,
-          spread: 50,
+          particleCount: 50,
+          spread: 45,
           origin: { y: 0.85 },
           colors: ['#00A3FF', '#7B61FF', '#00C48C', '#FFFFFF'],
         });
@@ -35,9 +35,9 @@ export default function Missions() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[70vh]">
-        <Activity className="w-10 h-10 text-space-purple animate-spin star-glow" />
-        <span className="mt-4 text-space-purple font-orbitron text-xs tracking-wider animate-pulse">
-          СКАНИРОВАНИЕ КОСМИЧЕСКИХ МИССИЙ...
+        <Activity className="w-8 h-8 text-space-purple animate-spin" />
+        <span className="mt-4 text-space-gray text-xs tracking-wide animate-pulse">
+          Загрузка списка миссий...
         </span>
       </div>
     );
@@ -46,40 +46,37 @@ export default function Missions() {
   if (error || !data) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[70vh] p-6 text-center">
-        <span className="text-red-500 font-orbitron text-base font-bold tracking-wider uppercase glow-text-purple">
-          [ Сбой Гиперсвязи ]
+        <span className="text-red-500 font-semibold text-sm tracking-wide">
+          Ошибка загрузки
         </span>
-        <span className="text-space-gray text-xs mt-2 font-exo">
-          Не удалось загрузить карту миссий из центрального ядра.
+        <span className="text-space-gray text-xs mt-1">
+          Не удалось соединиться со спутником миссий.
         </span>
       </div>
     );
   }
 
-  const getStatusConfig = (status: string) => {
+  const getStatusBadge = (status: string) => {
     switch (status) {
       case 'COMPLETED':
-        return {
-          wrapperClass: 'rgba(0, 196, 140, 0.4)',
-          statusText: 'ЗАВЕРШЕНА',
-          statusColor: 'text-space-green glow-text-green',
-          borderGrad: 'from-space-green/45 to-space-green/10',
-        };
+        return (
+          <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 border rounded-full text-[9px] font-semibold bg-space-green/10 text-space-green border-space-green/20">
+            <span>Завершена</span>
+          </span>
+        );
       case 'ACTIVE':
-        return {
-          wrapperClass: 'rgba(0, 163, 255, 0.4)',
-          statusText: 'АКТИВНА',
-          statusColor: 'text-space-blue glow-text-blue animate-pulse',
-          borderGrad: 'from-space-blue/45 via-space-purple/20 to-space-blue/15',
-        };
+        return (
+          <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 border rounded-full text-[9px] font-semibold bg-space-blue/10 text-space-blue border-space-blue/20 animate-pulse">
+            <span>Активна</span>
+          </span>
+        );
       case 'LOCKED':
       default:
-        return {
-          wrapperClass: 'rgba(138, 155, 181, 0.1)',
-          statusText: 'ЗАБЛОКИРОВАНА',
-          statusColor: 'text-space-gray/50',
-          borderGrad: 'from-white/10 to-white/5',
-        };
+        return (
+          <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 border rounded-full text-[9px] font-semibold bg-white/5 text-space-gray/60 border-white/10">
+            <span>Заблокирована</span>
+          </span>
+        );
     }
   };
 
@@ -87,21 +84,21 @@ export default function Missions() {
     switch (status) {
       case 'COMPLETED':
         return (
-          <div className="p-2 bg-space-green/20 rounded border border-space-green/35">
-            <Check className="w-4 h-4 text-space-green star-glow" />
+          <div className="p-2 bg-space-green/15 rounded-lg border border-space-green/20 text-space-green">
+            <Check className="w-4 h-4" />
           </div>
         );
       case 'ACTIVE':
         return (
-          <div className="p-2 bg-space-blue/20 rounded border border-space-blue/35">
-            <Zap className="w-4 h-4 text-space-blue animate-bounce-slow star-glow" />
+          <div className="p-2 bg-space-blue/15 rounded-lg border border-space-blue/20 text-space-blue">
+            <Zap className="w-4 h-4" />
           </div>
         );
       case 'LOCKED':
       default:
         return (
-          <div className="p-2 bg-white/5 rounded border border-white/15">
-            <Lock className="w-4 h-4 text-space-gray/60" />
+          <div className="p-2 bg-white/5 rounded-lg border border-white/10 text-space-gray/50">
+            <Lock className="w-4 h-4" />
           </div>
         );
     }
@@ -109,140 +106,102 @@ export default function Missions() {
 
   const getMissionTitle = (stage: number) => {
     switch (stage) {
-      case 1: return 'ПЕРВЫЙ ПОЛЕТ';
-      case 2: return 'ЗВЕЗДНЫЙ МАРШ';
-      case 3: return 'КОСМИЧЕСКИЙ АС';
-      default: return `МИССИЯ ЭТАП ${stage}`;
+      case 1: return 'Первый полет';
+      case 2: return 'Звездный марш';
+      case 3: return 'Космический Ас';
+      default: return `Миссия Этап ${stage}`;
     }
   };
 
-  // Generate ASCII progress bar e.g. [██████░░░░] 60%
-  const getAsciiProgressBar = (progress: number, target: number) => {
-    const percentage = Math.min(100, Math.max(0, (progress / target) * 100));
-    const filledCount = Math.round(percentage / 10);
-    const emptyCount = 10 - filledCount;
-    const bar = '█'.repeat(filledCount) + '░'.repeat(emptyCount);
-    return `[${bar}] ${Math.round(percentage)}%`;
-  };
-
   return (
-    <div className="px-4 py-3 space-y-6 font-exo">
+    <div className="px-4 py-3 space-y-6 font-sans">
       
       <div className="text-center">
-        <h1 className="text-xl font-orbitron font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-space-blue to-space-purple glow-text-blue">
-          ДЕРЕВО МИССИЙ
+        <h1 className="text-xl font-bold tracking-tight text-white">
+          Дерево миссий
         </h1>
-        <p className="text-[10px] font-orbitron text-space-gray tracking-wider uppercase mt-1">
-          // Навигационные задания и боевые награды флота
+        <p className="text-xs text-space-gray/95 mt-1">
+          Выполняйте задания и получайте дополнительные бонусы
         </p>
       </div>
 
-      {/* Vertical connection design inside grid */}
-      <div className="relative flex flex-col items-center space-y-8">
+      <div className="relative flex flex-col items-center space-y-5">
         
-        {/* Central HUD timeline dashed connector line */}
-        <div className="absolute top-10 bottom-10 w-[1px] border-l border-dashed border-space-blue/30 -z-10" />
+        {/* Simple elegant vertical line */}
+        <div className="absolute top-10 bottom-10 w-[1px] bg-white/5 -z-10" />
 
         {data.missions.map((mission, index) => {
           const isLocked = mission.status === 'LOCKED';
-          const isActive = mission.status === 'ACTIVE';
-          const isCompleted = mission.status === 'COMPLETED';
-          const conf = getStatusConfig(mission.status);
+          const pct = Math.min(100, (mission.progress / mission.target) * 100);
 
           return (
             <motion.div
               key={mission.id}
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.12 }}
-              className={`w-full max-w-sm relative ${isLocked ? 'opacity-55' : ''}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className={`w-full max-w-sm glass-card relative overflow-hidden bg-gradient-to-br from-white/[0.03] to-white/[0.01] ${isLocked ? 'opacity-55' : ''}`}
             >
               
-              {/* Outer HUD Card wrapper with custom status borders */}
-              <div 
-                className="relative p-[1px] clip-path transition-all duration-300"
-                style={{
-                  background: `linear-gradient(135deg, ${conf.wrapperClass} 0%, rgba(13,27,49,0.3) 70%, rgba(255,255,255,0.03) 100%)`,
-                  clipPath: 'polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px))'
-                }}
-              >
-                <div 
-                  className="bg-space-bg/90 backdrop-blur-md p-4 relative overflow-hidden"
-                  style={{
-                    clipPath: 'polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px))'
-                  }}
-                >
+              {/* WalletCard shine effect inside active items */}
+              {!isLocked && <div className="wallet-card-overlay" />}
+
+              <div className="p-5 flex items-start space-x-4 relative z-10">
+                <div className="flex-shrink-0">{getMissionIcon(mission.status)}</div>
+                
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[9px] font-bold text-space-gray uppercase tracking-wider">
+                      Этап {mission.stage}
+                    </span>
+                    {getStatusBadge(mission.status)}
+                  </div>
                   
-                  {/* Decorative corner brackets */}
-                  <div className="absolute top-0 left-0 w-2.5 h-2.5 border-t border-l border-white/10" />
-                  <div className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b border-r border-white/10" />
+                  <h3 className="font-bold text-sm text-white/95 leading-tight mt-1">
+                    {getMissionTitle(mission.stage)}
+                  </h3>
                   
-                  {/* Glowing core */}
-                  {isActive && (
-                    <div className="absolute -top-10 -right-10 w-28 h-28 bg-space-blue/5 rounded-full blur-2xl pointer-events-none" />
-                  )}
-                  {isCompleted && (
-                    <div className="absolute -top-10 -right-10 w-28 h-28 bg-space-green/5 rounded-full blur-2xl pointer-events-none" />
-                  )}
-
-                  <div className="flex items-start space-x-3.5 relative z-10">
-                    <div className="mt-0.5">{getMissionIcon(mission.status)}</div>
-                    
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[8px] font-orbitron text-space-gray tracking-wider uppercase font-bold">
-                          ЭТАП #0{mission.stage}
-                        </span>
-                        <span className={`text-[8px] font-orbitron tracking-wider font-bold ${conf.statusColor}`}>
-                          // {conf.statusText}
-                        </span>
-                      </div>
-                      
-                      <h3 className="font-orbitron font-extrabold text-sm tracking-wide text-white leading-tight mt-0.5">
-                        {getMissionTitle(mission.stage)}
-                      </h3>
-                      
-                      {/* Reward specifications */}
-                      <div className="mt-3 flex flex-wrap gap-1.5">
-                        <span className="text-[9px] font-orbitron bg-space-blue/10 border border-space-blue/30 px-2 py-0.5 rounded text-space-blue font-bold">
-                          НАГРАДА: {mission.reward}
-                        </span>
-                        {mission.deadlineDays && (
-                          <span className="text-[9px] font-orbitron bg-space-purple/10 border border-space-purple/35 px-2 py-0.5 rounded text-space-purple font-bold">
-                            СРОК: {mission.deadlineDays} ДН.
-                          </span>
-                        )}
-                        {mission.minRating && (
-                          <span className="text-[9px] font-orbitron bg-yellow-400/10 border border-yellow-400/30 px-2 py-0.5 rounded text-yellow-400 font-bold">
-                            РЕЙТИНГ &ge; {mission.minRating}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* ASCII progress logs */}
-                      {!isLocked && (
-                        <div className="mt-4 font-mono text-[9px]">
-                          <div className="flex justify-between text-space-gray mb-1">
-                            <span>РЕЙСЫ</span>
-                            <span>{mission.progress} / {mission.target}</span>
-                          </div>
-                          
-                          {/* 6. ASCII progress bar */}
-                          <div className="text-space-blue tracking-tighter glow-text-blue whitespace-pre font-bold">
-                            {getAsciiProgressBar(mission.progress, mission.target)}
-                          </div>
-                        </div>
-                      )}
-
-                      {isLocked && (
-                        <div className="text-[9px] font-orbitron text-space-gray/50 italic mt-3 flex items-center space-x-1">
-                          <Lock className="w-3 h-3" />
-                          <span>МОДУЛЬ ЗАБЛОКИРОВАН</span>
-                        </div>
-                      )}
-                    </div>
+                  {/* Rewards items styled as simple pills */}
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    <span className="text-[9px] font-semibold bg-space-blue/5 border border-space-blue/15 px-2 py-0.5 rounded-full text-space-blue">
+                      Награда: {mission.reward}
+                    </span>
+                    {mission.deadlineDays && (
+                      <span className="text-[9px] font-semibold bg-space-purple/5 border border-space-purple/15 px-2 py-0.5 rounded-full text-space-purple">
+                        Срок: {mission.deadlineDays} дн.
+                      </span>
+                    )}
+                    {mission.minRating && (
+                      <span className="text-[9px] font-semibold bg-yellow-400/5 border border-yellow-400/15 px-2 py-0.5 rounded-full text-yellow-400">
+                        Рейтинг &ge; {mission.minRating}
+                      </span>
+                    )}
                   </div>
 
+                  {/* Clean progress bar */}
+                  {!isLocked && (
+                    <div className="mt-4">
+                      <div className="flex justify-between text-[10px] text-space-gray mb-1.5 font-medium">
+                        <span>Прогресс поездок</span>
+                        <span>{mission.progress} / {mission.target}</span>
+                      </div>
+                      <div className="h-1 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                        <div 
+                          style={{ width: `${pct}%` }}
+                          className={`h-full rounded-full transition-all duration-500 ${
+                            mission.status === 'COMPLETED' ? 'bg-space-green' : 'bg-space-blue'
+                          }`}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {isLocked && (
+                    <div className="text-[10px] text-space-gray/50 italic mt-3 flex items-center space-x-1">
+                      <Lock className="w-3 h-3" />
+                      <span>Миссия заблокирована</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
