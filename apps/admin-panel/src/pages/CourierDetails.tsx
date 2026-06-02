@@ -178,42 +178,64 @@ export default function CourierDetails() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Statistics and Quick Form Column */}
         <div className="lg:col-span-1 space-y-6">
-          {/* Status Stats Panel */}
-          <div className="glass-card rounded-xl p-6 border border-white/5 space-y-4">
-            <h3 className="text-sm font-bold text-space-gray uppercase tracking-wider">Основная информация</h3>
-            <div className="space-y-3">
-              <div className="flex justify-between border-b border-white/5 pb-2">
-                <span className="text-space-gray text-xs">Имя:</span>
-                <span className="text-white text-xs font-bold">{data.name}</span>
+          {/* Status Stats Panel (Apple Wallet style card) */}
+          <div className="glass-card rounded-[24px] p-6 border border-white/5 space-y-5 relative overflow-hidden bg-gradient-to-br from-white/[0.04] to-white/[0.01]">
+            {/* Soft wallet glossy shine */}
+            <div className="wallet-card-overlay" />
+            
+            {/* WWDC blurred card blobs */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-space-blue/10 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-space-purple/5 rounded-full blur-2xl pointer-events-none" />
+
+            {/* Avatar and name section */}
+            <div className="flex items-center space-x-4 relative z-10 pb-4 border-b border-white/5">
+              <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-lg font-bold shadow-inner">
+                {data.name.slice(0, 2).toUpperCase()}
               </div>
-              <div className="flex justify-between border-b border-white/5 pb-2">
-                <span className="text-space-gray text-xs">Username:</span>
-                <span className="text-white text-xs font-mono">@{data.username || 'нет'}</span>
+              <div className="min-w-0">
+                <h4 className="text-base font-bold text-white leading-tight truncate">{data.name}</h4>
+                <p className="text-xs text-space-gray mt-0.5 truncate">@{data.username || 'нет username'}</p>
               </div>
-              <div className="flex justify-between border-b border-white/5 pb-2">
-                <span className="text-space-gray text-xs">Telegram ID:</span>
-                <span className="text-white text-xs font-mono">{data.telegramId}</span>
+            </div>
+
+            {/* Statistics setting-style list */}
+            <div className="space-y-3.5 relative z-10 text-xs">
+              <div className="flex justify-between items-center">
+                <span className="text-space-gray">Telegram ID</span>
+                <span className="text-white font-mono bg-white/5 px-2 py-0.5 rounded">{data.telegramId}</span>
               </div>
-              <div className="flex justify-between border-b border-white/5 pb-2">
-                <span className="text-space-gray text-xs">Ранг:</span>
-                <span className="text-space-blue text-xs font-bold">{data.rank}</span>
+              <div className="flex justify-between items-center">
+                <span className="text-space-gray">Ранг</span>
+                <span className="text-space-blue font-bold bg-space-blue/10 px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider">{data.rank}</span>
               </div>
-              <div className="flex justify-between border-b border-white/5 pb-2">
-                <span className="text-space-gray text-xs">Заказы:</span>
-                <span className="text-white text-xs font-bold">{data.ordersCount}</span>
+              <div className="flex justify-between items-center">
+                <span className="text-space-gray">Рейтинг</span>
+                <span className="text-yellow-400 font-bold flex items-center">
+                  <Star className="w-3.5 h-3.5 fill-current mr-1 text-yellow-400" /> {data.rating.toFixed(2)}
+                </span>
               </div>
-              <div className="flex justify-between border-b border-white/5 pb-2">
-                <span className="text-space-gray text-xs">Рейтинг:</span>
-                <span className="text-yellow-400 text-xs font-bold">★ {data.rating.toFixed(2)}</span>
+              <div className="flex justify-between items-center">
+                <span className="text-space-gray">Всего заказов</span>
+                <span className="text-white font-bold">{data.ordersCount}</span>
               </div>
-              <div className="flex justify-between border-b border-white/5 pb-2">
-                <span className="text-space-gray text-xs">Звездная карта:</span>
-                <span className="text-space-blue text-xs font-bold">{data.starMapProgress} / 80</span>
+            </div>
+
+            {/* Progress bar section */}
+            <div className="space-y-2 pt-4 border-t border-white/5 relative z-10">
+              <div className="flex justify-between text-[11px]">
+                <span className="text-space-gray">Прогресс Звездной карты</span>
+                <span className="text-white font-bold">{data.starMapProgress} / 80</span>
+              </div>
+              <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-space-blue rounded-full transition-all duration-500" 
+                  style={{ width: `${Math.min((data.starMapProgress / 80) * 100, 100)}%` }}
+                />
               </div>
             </div>
 
             {/* Quick Star Map Bonus Trigger */}
-            <div className="pt-2">
+            <div className="pt-2 relative z-10">
               <button
                 onClick={() => {
                   if (confirm('Подтвердить выплату 2000 ₽ по Звездной карте?')) {
@@ -221,19 +243,19 @@ export default function CourierDetails() {
                   }
                 }}
                 disabled={data.starMapProgress < 80}
-                className="w-full bg-space-green hover:bg-space-green/90 disabled:bg-white/5 disabled:text-white/30 text-white font-bold text-xs py-2 rounded-lg transition-colors flex items-center justify-center space-x-1.5"
+                className="w-full bg-space-green hover:bg-space-green/90 disabled:bg-white/5 disabled:text-white/30 text-white font-bold text-xs py-2.5 rounded-lg transition-colors flex items-center justify-center space-x-1.5"
               >
                 <Coins className="w-3.5 h-3.5" />
                 <span>Выдать бонус Star Map (2000 ₽)</span>
               </button>
               {data.starMapProgress < 80 && (
-                <p className="text-[10px] text-space-gray mt-1 text-center">Необходимо накопить 80 заказов</p>
+                <p className="text-[10px] text-space-gray mt-1.5 text-center">Необходимо накопить 80 заказов</p>
               )}
             </div>
           </div>
 
           {/* Quick Edit Form */}
-          <div className="glass-card rounded-xl p-6 border border-white/5">
+          <div className="glass-card rounded-[24px] p-6 border border-white/5">
             <h3 className="text-sm font-bold text-space-gray uppercase tracking-wider mb-4">Изменить показатели</h3>
             <form onSubmit={handleUpdateOrders} className="space-y-4">
               <div>
@@ -242,7 +264,7 @@ export default function CourierDetails() {
                   type="text"
                   value={nameInput}
                   onChange={(e) => setNameInput(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-xs focus:outline-none focus:border-space-blue"
+                  className="w-full bg-white/[0.02] border border-white/5 rounded-lg px-3 py-2 text-white text-xs focus:outline-none focus:border-space-blue/50 focus:bg-white/[0.04] transition-colors"
                 />
               </div>
               <div>
@@ -251,7 +273,7 @@ export default function CourierDetails() {
                   type="number"
                   value={ordersInput}
                   onChange={(e) => setOrdersInput(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-xs focus:outline-none focus:border-space-blue"
+                  className="w-full bg-white/[0.02] border border-white/5 rounded-lg px-3 py-2 text-white text-xs focus:outline-none focus:border-space-blue/50 focus:bg-white/[0.04] transition-colors"
                 />
               </div>
               <div>
@@ -263,13 +285,13 @@ export default function CourierDetails() {
                   max="5"
                   value={ratingInput}
                   onChange={(e) => setRatingInput(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-xs focus:outline-none focus:border-space-blue"
+                  className="w-full bg-white/[0.02] border border-white/5 rounded-lg px-3 py-2 text-white text-xs focus:outline-none focus:border-space-blue/50 focus:bg-white/[0.04] transition-colors"
                 />
               </div>
               <button
                 type="submit"
                 disabled={updateOrdersMutation.isLoading}
-                className="w-full bg-space-blue hover:bg-space-blue/90 disabled:bg-space-blue/50 text-white font-bold text-xs py-2 rounded-lg transition-colors"
+                className="w-full bg-space-blue hover:bg-space-blue/90 disabled:bg-space-blue/50 text-white font-bold text-xs py-2.5 rounded-lg transition-colors"
               >
                 Сохранить данные
               </button>
@@ -280,7 +302,7 @@ export default function CourierDetails() {
         {/* Missions override and Bonus History */}
         <div className="lg:col-span-2 space-y-6">
           {/* RPG Mission Tree Stage table */}
-          <div className="glass-card rounded-xl p-6 border border-white/5">
+          <div className="glass-card rounded-[24px] p-6 border border-white/5">
             <h3 className="text-sm font-bold text-space-gray uppercase tracking-wider mb-4">Этапы миссий First Flight</h3>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
@@ -299,10 +321,10 @@ export default function CourierDetails() {
                     <tr key={m.id} className="border-b border-white/5 hover:bg-white/1">
                       <td className="py-3 px-4 font-bold">Этап {m.stage}</td>
                       <td className="py-3 px-4">
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                          m.status === 'COMPLETED' ? 'bg-space-green/10 text-space-green border border-space-green/20' :
-                          m.status === 'ACTIVE' ? 'bg-space-blue/10 text-space-blue border border-space-blue/20' :
-                          'bg-white/5 text-space-gray border border-white/10'
+                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                          m.status === 'COMPLETED' ? 'bg-space-green/10 text-space-green' :
+                          m.status === 'ACTIVE' ? 'bg-space-blue/10 text-space-blue' :
+                          'bg-white/5 text-space-gray'
                         }`}>
                           {m.status}
                         </span>
@@ -337,7 +359,7 @@ export default function CourierDetails() {
                   <select
                     value={overrideStage}
                     onChange={(e) => setOverrideStage(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-space-blue"
+                    className="w-full bg-white/[0.02] border border-white/5 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-space-blue/50 focus:bg-white/[0.04] transition-colors"
                   >
                     <option value="1" className="bg-space-bg">1 (20 заказов)</option>
                     <option value="2" className="bg-space-bg">2 (40 заказов)</option>
@@ -349,7 +371,7 @@ export default function CourierDetails() {
                   <select
                     value={overrideStatus}
                     onChange={(e) => setOverrideStatus(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-space-blue"
+                    className="w-full bg-white/[0.02] border border-white/5 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-space-blue/50 focus:bg-white/[0.04] transition-colors"
                   >
                     <option value="LOCKED" className="bg-space-bg">LOCKED (Закрыт)</option>
                     <option value="ACTIVE" className="bg-space-bg">ACTIVE (Активен)</option>
@@ -362,13 +384,13 @@ export default function CourierDetails() {
                     type="number"
                     value={overrideProgress}
                     onChange={(e) => setOverrideProgress(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-space-blue"
+                    className="w-full bg-white/[0.02] border border-white/5 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-space-blue/50 focus:bg-white/[0.04] transition-colors"
                   />
                 </div>
                 <button
                   type="submit"
                   disabled={overrideStageMutation.isLoading}
-                  className="w-full bg-space-purple hover:bg-space-purple/90 disabled:bg-space-purple/50 text-white font-bold text-xs py-2 rounded-lg transition-colors"
+                  className="w-full bg-space-purple hover:bg-space-purple/90 disabled:bg-space-purple/50 text-white font-bold text-xs py-2.5 rounded-lg transition-colors"
                 >
                   Изменить
                 </button>
@@ -377,7 +399,7 @@ export default function CourierDetails() {
           </div>
 
           {/* Bonus Ledger */}
-          <div className="glass-card rounded-xl p-6 border border-white/5">
+          <div className="glass-card rounded-[24px] p-6 border border-white/5">
             <h3 className="text-sm font-bold text-space-gray uppercase tracking-wider mb-4">История бонусов и наград</h3>
             {data.bonusHistory.length === 0 ? (
               <div className="text-center py-6 text-xs text-space-gray">
