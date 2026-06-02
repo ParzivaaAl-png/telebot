@@ -44,21 +44,10 @@ export default function App() {
       <div className="flex flex-col min-h-screen max-w-md mx-auto relative pb-24 font-sans selection:bg-space-blue/30">
         
         {/* Top Header */}
-        <header className="sticky top-0 z-40 bg-[#0A1628] border-b border-white/[0.04] py-4 px-5 flex items-center justify-between pt-[calc(1rem+env(safe-area-inset-top))]">
-          <div className="flex items-center space-x-2">
-            <span className="font-bold text-base tracking-tight text-white">
-              Atlas Fleet
-            </span>
-          </div>
-          <button 
-            onClick={() => setActiveTab('notifications')}
-            className="relative p-1.5 text-space-gray hover:text-white transition-colors"
-          >
-            <Bell className="w-5 h-5" />
-            {unreadCount > 0 && (
-              <span className="absolute top-1 right-1 bg-red-500 text-white text-[8px] font-bold rounded-full w-2.5 h-2.5 flex items-center justify-center" />
-            )}
-          </button>
+        <header className="sticky top-0 z-40 bg-[#0A1628] border-b border-white/[0.04] py-4 px-5 flex items-center pt-[calc(1rem+env(safe-area-inset-top))]">
+          <span className="font-bold text-base tracking-tight text-white">
+            Atlas Fleet
+          </span>
         </header>
 
         {/* Content Area */}
@@ -136,14 +125,7 @@ export default function App() {
                   transition={{ type: 'spring', stiffness: 380, damping: 28 }}
                 />
               )}
-              <div className="relative flex items-center justify-center">
-                <Bell className={`w-5 h-5 transition-colors duration-200 ${activeTab === 'notifications' ? 'text-space-blue' : 'text-space-gray'}`} />
-                {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center border border-[#1A2235] z-20">
-                    {unreadCount}
-                  </span>
-                )}
-              </div>
+              <Bell className={`w-5 h-5 transition-colors duration-200 ${activeTab === 'notifications' ? 'text-space-blue' : 'text-space-gray'}`} />
               <span className={`text-[9px] font-semibold tracking-wide mt-1 transition-colors duration-200 ${activeTab === 'notifications' ? 'text-space-blue' : 'text-space-gray'}`}>
                 Журнал
               </span>
