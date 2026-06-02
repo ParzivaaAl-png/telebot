@@ -149,7 +149,8 @@ export default function StarMap() {
                 className="flex justify-between items-center p-4 hover:bg-white/[0.01] transition-all"
               >
                 <div className="flex items-center space-x-3.5">
-                  <div className="w-8 h-8 rounded-lg bg-space-green/10 border border-space-green/20 flex items-center justify-center text-space-green">
+                  {/* Clean icon container with no border */}
+                  <div className="w-8 h-8 rounded-lg bg-space-green/10 flex items-center justify-center text-space-green">
                     <Navigation className="w-4 h-4" />
                   </div>
                   <div>

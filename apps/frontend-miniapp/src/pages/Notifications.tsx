@@ -122,7 +122,7 @@ export default function Notifications() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.04 }}
               className={`ios-notification flex items-start space-x-3.5 p-4 relative overflow-hidden ${
-                !n.isRead ? 'bg-white/[0.06] border border-white/10' : ''
+                !n.isRead ? 'bg-white/[0.06]' : ''
               }`}
               whileTap={{ scale: 0.98 }}
             >

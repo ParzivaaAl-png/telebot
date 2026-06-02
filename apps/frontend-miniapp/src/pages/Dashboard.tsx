@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 
 export default function Dashboard() {
   const { initData } = useTelegram();
-  const { setActiveTab } = useAppStore();
+  const { setActiveTab, unreadCount } = useAppStore();
 
   const { data: meData, isLoading: isMeLoading, error: meError } = useQuery<CourierMeResponse>({
     queryKey: ['me', initData],
@@ -69,15 +69,15 @@ export default function Dashboard() {
   const getRankConfig = (rank: string) => {
     switch (rank) {
       case 'CADET':
-        return { name: 'Кадет', dotColor: 'bg-space-blue', badgeColor: 'bg-space-blue/10 text-space-blue border-space-blue/20' };
+        return { name: 'Кадет', dotColor: 'bg-space-blue', badgeColor: 'bg-space-blue/15 text-space-blue' };
       case 'NAVIGATOR':
-        return { name: 'Навигатор', dotColor: 'bg-space-purple', badgeColor: 'bg-space-purple/10 text-space-purple border-space-purple/20' };
+        return { name: 'Навигатор', dotColor: 'bg-space-purple', badgeColor: 'bg-space-purple/15 text-space-purple' };
       case 'PILOT':
-        return { name: 'Пилот', dotColor: 'bg-space-green', badgeColor: 'bg-space-green/10 text-space-green border-space-green/20' };
+        return { name: 'Пилот', dotColor: 'bg-space-green', badgeColor: 'bg-space-green/15 text-space-green' };
       case 'COMMANDER':
-        return { name: 'Командор', dotColor: 'bg-yellow-400', badgeColor: 'bg-yellow-400/10 text-yellow-400 border-yellow-400/20' };
+        return { name: 'Командор', dotColor: 'bg-yellow-400', badgeColor: 'bg-yellow-400/15 text-yellow-400' };
       default:
-        return { name: rank, dotColor: 'bg-space-blue', badgeColor: 'bg-space-blue/10 text-space-blue border-space-blue/20' };
+        return { name: rank, dotColor: 'bg-space-blue', badgeColor: 'bg-space-blue/15 text-space-blue' };
     }
   };
 
@@ -138,7 +138,7 @@ export default function Dashboard() {
               {courier.name}
             </h1>
             {/* Rank badge */}
-            <div className={`inline-flex items-center space-x-1.5 px-2.5 py-0.5 mt-1 border rounded-full text-[9px] font-semibold tracking-wide ${rankConf.badgeColor}`}>
+            <div className={`inline-flex items-center space-x-1.5 px-2.5 py-0.5 mt-1 rounded-full text-[9px] font-semibold tracking-wide ${rankConf.badgeColor}`}>
               <span className={`w-1.5 h-1.5 rounded-full ${rankConf.dotColor} animate-pulse`} />
               <span>{rankConf.name}</span>
             </div>
@@ -223,59 +223,66 @@ export default function Dashboard() {
 
       </motion.div>
 
-      {/* 2. Apple Settings Stack Menu */}
-      <div className="space-y-2">
+      {/* 2. Wolt-Style Categories Row */}
+      <div className="space-y-3">
         <h2 className="text-[11px] font-bold text-space-gray tracking-wider uppercase px-1">
           Разделы
         </h2>
         
-        <div className="glass-card overflow-hidden border border-white/5 divide-y divide-white/5 shadow-sm">
+        <div className="grid grid-cols-3 gap-3">
           
-          {/* Row 1: Missions */}
+          {/* Category 1: Missions */}
           <div 
             onClick={() => setActiveTab('missions')}
-            className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/[0.02] active:bg-white/[0.05] transition-all"
+            className="glass-card p-4 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-white/[0.05] active:scale-95 transition-all relative overflow-hidden"
           >
-            <div className="flex items-center space-x-3.5">
-              <div className="w-7 h-7 bg-space-purple rounded-lg flex items-center justify-center text-white shadow-sm">
-                <Rocket className="w-4 h-4" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-xs text-white/95">
-                  Миссии и задания
-                </h3>
-                <p className="text-[10px] text-space-gray/80">
-                  RPG дерево мотивирующих целей
-                </p>
-              </div>
+            <div className="wallet-card-overlay" />
+            
+            {/* Tag like Wolt's "Новинка" / Solid & Borderless */}
+            <span className="absolute top-1 right-1 bg-space-blue text-[#0A1628] text-[8px] font-black px-1.5 py-0.5 rounded">
+              АКТИВНО
+            </span>
+            
+            <div className="w-10 h-10 rounded-full bg-space-purple/10 flex items-center justify-center text-space-purple mb-2">
+              <Rocket className="w-5 h-5" />
             </div>
-            <ChevronRight className="w-4 h-4 text-space-gray/50" />
+            <span className="text-[11px] font-bold text-white/95">Миссии</span>
           </div>
 
-          {/* Row 2: Star Map */}
+          {/* Category 2: Star Map */}
           <div 
             onClick={() => setActiveTab('starmap')}
-            className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/[0.02] active:bg-white/[0.05] transition-all"
+            className="glass-card p-4 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-white/[0.05] active:scale-95 transition-all relative overflow-hidden"
           >
-            <div className="flex items-center space-x-3.5">
-              <div className="w-7 h-7 bg-space-blue rounded-lg flex items-center justify-center text-white shadow-sm">
-                <Compass className="w-4 h-4" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-xs text-white/95">
-                  Навигационная карта
-                </h3>
-                <p className="text-[10px] text-space-gray/80">
-                  Накопительный супербонус (цикл 80 заказов)
-                </p>
-              </div>
+            <div className="wallet-card-overlay" />
+            
+            <span className="absolute top-1 right-1 bg-space-purple text-white text-[8px] font-black px-1.5 py-0.5 rounded">
+              {courier.starMapProgress}/80
+            </span>
+            
+            <div className="w-10 h-10 rounded-full bg-space-blue/10 flex items-center justify-center text-space-blue mb-2">
+              <Compass className="w-5 h-5" />
             </div>
-            <div className="flex items-center space-x-2">
-              <span className="text-[11px] font-bold text-space-blue mr-1">
-                {courier.starMapProgress}/80
+            <span className="text-[11px] font-bold text-white/95">Карта</span>
+          </div>
+
+          {/* Category 3: Journal */}
+          <div 
+            onClick={() => setActiveTab('notifications')}
+            className="glass-card p-4 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-white/[0.05] active:scale-95 transition-all relative overflow-hidden"
+          >
+            <div className="wallet-card-overlay" />
+            
+            {unreadCount > 0 && (
+              <span className="absolute top-1 right-1 bg-red-500 text-white text-[8px] font-black px-1.5 py-0.5 rounded">
+                +{unreadCount}
               </span>
-              <ChevronRight className="w-4 h-4 text-space-gray/50" />
+            )}
+            
+            <div className="w-10 h-10 rounded-full bg-space-green/10 flex items-center justify-center text-space-green mb-2">
+              <Bell className="w-5 h-5" />
             </div>
+            <span className="text-[11px] font-bold text-white/95">Журнал</span>
           </div>
 
         </div>

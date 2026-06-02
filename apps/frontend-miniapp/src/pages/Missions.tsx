@@ -60,20 +60,20 @@ export default function Missions() {
     switch (status) {
       case 'COMPLETED':
         return (
-          <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 border rounded-full text-[9px] font-semibold bg-space-green/10 text-space-green border-space-green/20">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-space-green text-[#0A1628]">
             <span>Завершена</span>
           </span>
         );
       case 'ACTIVE':
         return (
-          <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 border rounded-full text-[9px] font-semibold bg-space-blue/10 text-space-blue border-space-blue/20 animate-pulse">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-space-blue text-[#0A1628] animate-pulse">
             <span>Активна</span>
           </span>
         );
       case 'LOCKED':
       default:
         return (
-          <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 border rounded-full text-[9px] font-semibold bg-white/5 text-space-gray/60 border-white/10">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-semibold bg-white/10 text-space-gray">
             <span>Заблокирована</span>
           </span>
         );
@@ -84,20 +84,20 @@ export default function Missions() {
     switch (status) {
       case 'COMPLETED':
         return (
-          <div className="p-2 bg-space-green/15 rounded-lg border border-space-green/20 text-space-green">
+          <div className="p-2 bg-space-green/10 rounded-lg text-space-green">
             <Check className="w-4 h-4" />
           </div>
         );
       case 'ACTIVE':
         return (
-          <div className="p-2 bg-space-blue/15 rounded-lg border border-space-blue/20 text-space-blue">
+          <div className="p-2 bg-space-blue/10 rounded-lg text-space-blue">
             <Zap className="w-4 h-4" />
           </div>
         );
       case 'LOCKED':
       default:
         return (
-          <div className="p-2 bg-white/5 rounded-lg border border-white/10 text-space-gray/50">
+          <div className="p-2 bg-white/5 rounded-lg text-space-gray/50">
             <Lock className="w-4 h-4" />
           </div>
         );
@@ -161,18 +161,18 @@ export default function Missions() {
                     {getMissionTitle(mission.stage)}
                   </h3>
                   
-                  {/* Rewards items styled as simple pills */}
+                  {/* Rewards items styled as simple solid pills without borders */}
                   <div className="mt-3 flex flex-wrap gap-1.5">
-                    <span className="text-[9px] font-semibold bg-space-blue/5 border border-space-blue/15 px-2 py-0.5 rounded-full text-space-blue">
+                    <span className="text-[9px] font-semibold bg-white/10 px-2.5 py-0.5 rounded-full text-white/90">
                       Награда: {mission.reward}
                     </span>
                     {mission.deadlineDays && (
-                      <span className="text-[9px] font-semibold bg-space-purple/5 border border-space-purple/15 px-2 py-0.5 rounded-full text-space-purple">
+                      <span className="text-[9px] font-semibold bg-white/10 px-2.5 py-0.5 rounded-full text-white/90">
                         Срок: {mission.deadlineDays} дн.
                       </span>
                     )}
                     {mission.minRating && (
-                      <span className="text-[9px] font-semibold bg-yellow-400/5 border border-yellow-400/15 px-2 py-0.5 rounded-full text-yellow-400">
+                      <span className="text-[9px] font-semibold bg-white/10 px-2.5 py-0.5 rounded-full text-white/90">
                         Рейтинг &ge; {mission.minRating}
                       </span>
                     )}
