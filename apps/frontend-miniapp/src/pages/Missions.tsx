@@ -57,12 +57,12 @@ export default function Missions() {
 
         <div className="relative flex flex-col items-center space-y-5">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="w-full max-w-sm glass-card p-5 flex items-start space-x-4">
+            <div key={i} className="w-full max-w-sm bg-white/[0.025] rounded-[20px] p-5 flex items-start space-x-4 relative overflow-hidden">
               <div className="w-9 h-9 rounded-lg skeleton-shimmer flex-shrink-0" />
               <div className="flex-1 space-y-3.5">
                 <div className="flex justify-between items-center">
                   <div className="h-2.5 w-12 rounded skeleton-shimmer" />
-                  <div className="h-4.5 w-16 rounded-full skeleton-shimmer" />
+                  <div className="h-4.5 w-16 rounded-full skeleton-shimmer animate-pulse" />
                 </div>
                 <div className="h-3.5 w-36 rounded skeleton-shimmer" />
                 <div className="flex space-x-2">

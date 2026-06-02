@@ -17,23 +17,58 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* Shimmer animation for premium skeleton loaders */
-@keyframes shimmer {
+/* Premium skeleton styles (Wolt / iOS matte panels with zero grain) */
+@keyframes skeletonMove {
   0% {
-    background-position: -200% 0;
+    transform: translateX(-100%);
   }
   100% {
-    background-position: 200% 0;
+    transform: translateX(100%);
+  }
+}
+
+@keyframes skeletonPulse {
+  0%, 100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.85;
   }
 }
 
 .skeleton-shimmer {
+  background-color: rgba(255, 255, 255, 0.055) !important;
+  position: relative;
+  overflow: hidden;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.skeleton-shimmer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.03) 25%,
-    rgba(255, 255, 255, 0.08) 37%,
-    rgba(255, 255, 255, 0.03) 63%
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.04) 20%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.04) 80%,
+    rgba(255, 255, 255, 0) 100%
   );
-  background-size: 200% 100%;
-  animation: shimmer 1.4s ease-in-out infinite;
+  animation: skeletonMove 1.6s infinite ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer::after {
+    animation: none !important;
+    display: none !important;
+  }
+  .skeleton-shimmer {
+    animation: skeletonPulse 1.4s infinite ease-in-out;
+  }
 }

@@ -36,7 +36,7 @@ export default function Dashboard() {
     return (
       <div className="space-y-6 px-4 py-4 font-sans text-white">
         {/* 1. Wallet-like Card Skeleton */}
-        <div className="glass-card p-5 bg-gradient-to-br from-white/[0.03] to-white/[0.01] space-y-6 relative overflow-hidden">
+        <div className="p-5 bg-white/[0.025] rounded-[24px] space-y-6 relative overflow-hidden">
           {/* Avatar and name section */}
           <div className="flex items-center space-x-4">
             <div className="w-12 h-12 rounded-full skeleton-shimmer flex-shrink-0" />
@@ -87,12 +87,18 @@ export default function Dashboard() {
 
         {/* 2. Categories Skeleton */}
         <div className="space-y-3">
-          <div className="h-3 w-16 rounded skeleton-shimmer px-1" />
-          <div className="grid grid-cols-3 gap-3">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="glass-card p-4 flex flex-col items-center justify-center space-y-3">
-                <div className="w-10 h-10 rounded-full skeleton-shimmer" />
-                <div className="h-2.5 w-12 rounded skeleton-shimmer" />
+          <div className="h-3 w-32 rounded skeleton-shimmer px-1" />
+          <div className="grid grid-cols-2 gap-3">
+            {[1, 2].map((i) => (
+              <div key={i} className="p-4 bg-white/[0.025] rounded-[18px] flex flex-col justify-between h-32 relative overflow-hidden">
+                <div className="flex justify-between items-start">
+                  <div className="w-8 h-8 rounded-full skeleton-shimmer" />
+                  <div className="h-4.5 w-16 rounded-full skeleton-shimmer animate-pulse" />
+                </div>
+                <div className="space-y-1.5">
+                  <div className="h-3 w-16 rounded skeleton-shimmer" />
+                  <div className="h-2.5 w-20 rounded skeleton-shimmer" />
+                </div>
               </div>
             ))}
           </div>
@@ -101,12 +107,12 @@ export default function Dashboard() {
         {/* 3. Notifications Skeleton */}
         <div className="space-y-3">
           <div className="flex justify-between px-1">
-            <div className="h-3 w-32 rounded skeleton-shimmer" />
+            <div className="h-3.5 w-36 rounded skeleton-shimmer" />
             <div className="h-3 w-16 rounded skeleton-shimmer" />
           </div>
           <div className="space-y-2">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="ios-notification flex items-center space-x-3.5 p-4">
+              <div key={i} className="bg-white/[0.02] rounded-[16px] flex items-center space-x-3.5 p-4 relative overflow-hidden">
                 <div className="w-8 h-8 rounded-full skeleton-shimmer flex-shrink-0" />
                 <div className="flex-1 space-y-2">
                   <div className="flex justify-between">

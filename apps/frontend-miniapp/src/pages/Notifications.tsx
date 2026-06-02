@@ -52,7 +52,7 @@ export default function Notifications() {
 
         <div className="space-y-2.5">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="ios-notification flex items-start space-x-3.5 p-4">
+            <div key={i} className="bg-white/[0.02] rounded-[16px] flex items-start space-x-3.5 p-4 relative overflow-hidden">
               <div className="w-8 h-8 rounded-full skeleton-shimmer flex-shrink-0" />
               <div className="flex-1 space-y-2">
                 <div className="flex justify-between items-start">

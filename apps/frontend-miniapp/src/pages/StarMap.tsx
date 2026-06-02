@@ -25,7 +25,7 @@ export default function StarMap() {
         </div>
 
         {/* Ring skeleton */}
-        <div className="glass-card p-6 flex flex-col items-center relative overflow-hidden">
+        <div className="p-6 bg-white/[0.025] rounded-[24px] flex flex-col items-center relative overflow-hidden">
           <div className="w-52 h-52 rounded-full border-[10px] border-white/5 flex items-center justify-center relative">
             <div className="flex flex-col items-center space-y-2">
               <div className="w-8 h-8 rounded-full skeleton-shimmer" />
@@ -43,9 +43,9 @@ export default function StarMap() {
         {/* History list skeleton */}
         <div className="space-y-2.5">
           <div className="h-3 w-28 rounded skeleton-shimmer px-1" />
-          <div className="glass-card divide-y divide-white/5">
+          <div className="bg-white/[0.02] rounded-[20px] divide-y divide-white/5 overflow-hidden">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="flex justify-between items-center p-4">
+              <div key={i} className="flex justify-between items-center p-4 relative overflow-hidden">
                 <div className="flex items-center space-x-3.5">
                   <div className="w-8 h-8 rounded-lg skeleton-shimmer flex-shrink-0" />
                   <div className="space-y-2">
