@@ -73,7 +73,7 @@ export default function App() {
           {/* Tab 1: Dashboard */}
           <button
             onClick={() => setActiveTab('dashboard')}
-            className="flex flex-col items-center relative py-1.5 w-20 transition-all active:scale-95"
+            className="flex flex-col items-center relative py-1.5 w-20 select-none focus:outline-none"
           >
             {activeTab === 'dashboard' && (
               <motion.div
@@ -91,7 +91,7 @@ export default function App() {
           {/* Tab 2: Missions */}
           <button
             onClick={() => setActiveTab('missions')}
-            className="flex flex-col items-center relative py-1.5 w-20 transition-all active:scale-95"
+            className="flex flex-col items-center relative py-1.5 w-20 select-none focus:outline-none"
           >
             {activeTab === 'missions' && (
               <motion.div
@@ -109,7 +109,7 @@ export default function App() {
           {/* Tab 3: StarMap */}
           <button
             onClick={() => setActiveTab('starmap')}
-            className="flex flex-col items-center relative py-1.5 w-20 transition-all active:scale-95"
+            className="flex flex-col items-center relative py-1.5 w-20 select-none focus:outline-none"
           >
             {activeTab === 'starmap' && (
               <motion.div
@@ -127,7 +127,7 @@ export default function App() {
           {/* Tab 4: Notifications */}
           <button
             onClick={() => setActiveTab('notifications')}
-            className="flex flex-col items-center relative py-1.5 w-20 transition-all active:scale-95"
+            className="flex flex-col items-center relative py-1.5 w-20 select-none focus:outline-none"
           >
             {activeTab === 'notifications' && (
               <motion.div
