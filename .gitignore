@@ -14,3 +14,5 @@ apps/frontend-miniapp/node_modules
 apps/admin-panel/node_modules
 apps/bot/node_modules
 packages/shared-types/node_modules
+
+.vercel
