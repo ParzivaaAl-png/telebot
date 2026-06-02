@@ -45,16 +45,21 @@ export default function App() {
       <div className="flex flex-col min-h-screen max-w-md mx-auto relative pb-24 font-sans selection:bg-space-blue/30">
         
         {/* Top Header */}
-        <header className="sticky top-0 z-40 bg-[#0A1628]/60 backdrop-blur-md border-b border-white/5 py-4 px-5 flex items-center justify-between">
+        <header className="sticky top-0 z-40 bg-[#0A1628] border-b border-white/[0.04] py-4 px-5 flex items-center justify-between pt-[calc(1rem+env(safe-area-inset-top))]">
           <div className="flex items-center space-x-2">
-            <span className="font-bold text-base tracking-tight text-white animate-pulse">
+            <span className="font-bold text-base tracking-tight text-white">
               Atlas Fleet
             </span>
           </div>
-          <div className="flex items-center space-x-1.5 px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-semibold text-white/95">
-            <span className="w-1.5 h-1.5 rounded-full bg-space-green animate-pulse" />
-            <span>Online</span>
-          </div>
+          <button 
+            onClick={() => setActiveTab('notifications')}
+            className="relative p-1.5 text-space-gray hover:text-white transition-colors"
+          >
+            <Bell className="w-5 h-5" />
+            {unreadCount > 0 && (
+              <span className="absolute top-1 right-1 bg-red-500 text-white text-[8px] font-bold rounded-full w-2.5 h-2.5 flex items-center justify-center" />
+            )}
+          </button>
         </header>
 
         {/* Content Area */}
@@ -63,91 +68,85 @@ export default function App() {
         </main>
 
         {/* Bottom Tab Bar */}
-        <nav className="fixed bottom-0 left-0 right-0 z-40 max-w-md mx-auto bg-[#0A1628]/70 backdrop-blur-xl border-t border-white/5 px-2 py-2 flex justify-around">
+        <nav className="fixed bottom-0 left-0 right-0 z-40 max-w-md mx-auto bg-[#0A1428]/72 backdrop-blur-[22px] border-t border-white/[0.06] px-3 py-2 flex justify-around shadow-[0_-12px_40px_rgba(0,0,0,0.35)] pb-[calc(0.5rem+env(safe-area-inset-bottom))]">
           
           {/* Tab 1: Dashboard */}
           <button
             onClick={() => setActiveTab('dashboard')}
-            className="flex flex-col items-center relative py-1 w-16 transition-all"
+            className="flex flex-col items-center relative py-1.5 w-20 transition-all active:scale-95"
           >
-            <div className="relative p-2 flex items-center justify-center">
-              <Compass className={`w-5 h-5 transition-colors duration-200 ${activeTab === 'dashboard' ? 'text-space-blue' : 'text-space-gray'}`} />
-            </div>
-            <span className={`text-[9px] font-medium tracking-wide relative z-10 transition-colors duration-200 ${activeTab === 'dashboard' ? 'text-space-blue font-semibold' : 'text-space-gray'}`}>
-              Главная
-            </span>
             {activeTab === 'dashboard' && (
               <motion.div
-                layoutId="active-nav-dot"
-                className="absolute bottom-0 w-1 h-1 rounded-full bg-space-blue"
+                layoutId="active-nav-pill"
+                className="absolute inset-0 bg-white/10 backdrop-blur-md border border-white/[0.05] rounded-[18px] -z-10"
                 transition={{ type: 'spring', stiffness: 350, damping: 25 }}
               />
             )}
+            <Compass className={`w-5 h-5 transition-colors duration-200 ${activeTab === 'dashboard' ? 'text-space-blue' : 'text-space-gray'}`} />
+            <span className={`text-[9px] font-semibold tracking-wide mt-1 transition-colors duration-200 ${activeTab === 'dashboard' ? 'text-space-blue' : 'text-space-gray'}`}>
+              Главная
+            </span>
           </button>
           
           {/* Tab 2: Missions */}
           <button
             onClick={() => setActiveTab('missions')}
-            className="flex flex-col items-center relative py-1 w-16 transition-all"
+            className="flex flex-col items-center relative py-1.5 w-20 transition-all active:scale-95"
           >
-            <div className="relative p-2 flex items-center justify-center">
-              <Rocket className={`w-5 h-5 transition-colors duration-200 ${activeTab === 'missions' ? 'text-space-purple' : 'text-space-gray'}`} />
-            </div>
-            <span className={`text-[9px] font-medium tracking-wide relative z-10 transition-colors duration-200 ${activeTab === 'missions' ? 'text-space-purple font-semibold' : 'text-space-gray'}`}>
-              Миссии
-            </span>
             {activeTab === 'missions' && (
               <motion.div
-                layoutId="active-nav-dot"
-                className="absolute bottom-0 w-1 h-1 rounded-full bg-space-purple"
+                layoutId="active-nav-pill"
+                className="absolute inset-0 bg-white/10 backdrop-blur-md border border-white/[0.05] rounded-[18px] -z-10"
                 transition={{ type: 'spring', stiffness: 350, damping: 25 }}
               />
             )}
+            <Rocket className={`w-5 h-5 transition-colors duration-200 ${activeTab === 'missions' ? 'text-space-blue' : 'text-space-gray'}`} />
+            <span className={`text-[9px] font-semibold tracking-wide mt-1 transition-colors duration-200 ${activeTab === 'missions' ? 'text-space-blue' : 'text-space-gray'}`}>
+              Миссии
+            </span>
           </button>
           
           {/* Tab 3: StarMap */}
           <button
             onClick={() => setActiveTab('starmap')}
-            className="flex flex-col items-center relative py-1 w-16 transition-all"
+            className="flex flex-col items-center relative py-1.5 w-20 transition-all active:scale-95"
           >
-            <div className="relative p-2 flex items-center justify-center">
-              <Star className={`w-5 h-5 transition-colors duration-200 ${activeTab === 'starmap' ? 'text-space-blue' : 'text-space-gray'}`} />
-            </div>
-            <span className={`text-[9px] font-medium tracking-wide relative z-10 transition-colors duration-200 ${activeTab === 'starmap' ? 'text-space-blue font-semibold' : 'text-space-gray'}`}>
-              Карта
-            </span>
             {activeTab === 'starmap' && (
               <motion.div
-                layoutId="active-nav-dot"
-                className="absolute bottom-0 w-1 h-1 rounded-full bg-space-blue"
+                layoutId="active-nav-pill"
+                className="absolute inset-0 bg-white/10 backdrop-blur-md border border-white/[0.05] rounded-[18px] -z-10"
                 transition={{ type: 'spring', stiffness: 350, damping: 25 }}
               />
             )}
+            <Star className={`w-5 h-5 transition-colors duration-200 ${activeTab === 'starmap' ? 'text-space-blue' : 'text-space-gray'}`} />
+            <span className={`text-[9px] font-semibold tracking-wide mt-1 transition-colors duration-200 ${activeTab === 'starmap' ? 'text-space-blue' : 'text-space-gray'}`}>
+              Карта
+            </span>
           </button>
           
           {/* Tab 4: Notifications */}
           <button
             onClick={() => setActiveTab('notifications')}
-            className="flex flex-col items-center relative py-1 w-16 transition-all"
+            className="flex flex-col items-center relative py-1.5 w-20 transition-all active:scale-95"
           >
-            <div className="relative p-2 flex items-center justify-center">
-              <Bell className={`w-5 h-5 transition-colors duration-200 ${activeTab === 'notifications' ? 'text-space-green' : 'text-space-gray'}`} />
+            {activeTab === 'notifications' && (
+              <motion.div
+                layoutId="active-nav-pill"
+                className="absolute inset-0 bg-white/10 backdrop-blur-md border border-white/[0.05] rounded-[18px] -z-10"
+                transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+              />
+            )}
+            <div className="relative flex items-center justify-center">
+              <Bell className={`w-5 h-5 transition-colors duration-200 ${activeTab === 'notifications' ? 'text-space-blue' : 'text-space-gray'}`} />
               {unreadCount > 0 && (
-                <span className="absolute top-1.5 right-1.5 bg-red-500 text-white text-[8px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center border border-[#0A1628] z-20">
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center border border-[#0A1628] z-20">
                   {unreadCount}
                 </span>
               )}
             </div>
-            <span className={`text-[9px] font-medium tracking-wide relative z-10 transition-colors duration-200 ${activeTab === 'notifications' ? 'text-space-green font-semibold' : 'text-space-gray'}`}>
+            <span className={`text-[9px] font-semibold tracking-wide mt-1 transition-colors duration-200 ${activeTab === 'notifications' ? 'text-space-blue' : 'text-space-gray'}`}>
               Журнал
             </span>
-            {activeTab === 'notifications' && (
-              <motion.div
-                layoutId="active-nav-dot"
-                className="absolute bottom-0 w-1 h-1 rounded-full bg-space-green"
-                transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-              />
-            )}
           </button>
 
         </nav>

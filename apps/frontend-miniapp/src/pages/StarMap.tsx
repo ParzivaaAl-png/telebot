@@ -153,7 +153,7 @@ export default function StarMap() {
           </div>
           {remaining > 0 ? (
             <p className="text-[10px] text-space-gray">
-              Осталось сделать <span className="text-white font-bold">{remaining}</span> заказов до завершения цикла
+              Осталось <span className="text-white font-bold">{remaining}</span> заказов до кэшбэка
             </p>
           ) : (
             <p className="text-[10px] text-space-green font-semibold animate-pulse">

@@ -56,8 +56,8 @@ export default function App() {
           <div className="space-y-8">
             {/* Console Branding */}
             <div className="flex items-center space-x-2.5">
-              <div className="w-3 h-3 rounded-full bg-space-blue shadow-glow-blue animate-pulse" />
-              <span className="font-extrabold text-sm tracking-wider uppercase text-transparent bg-clip-text bg-gradient-to-r from-space-blue to-space-purple">
+              <div className="w-2.5 h-2.5 rounded-full bg-space-blue animate-pulse" />
+              <span className="font-extrabold text-sm tracking-wider uppercase text-white">
                 Atlas Command
               </span>
             </div>
@@ -67,7 +67,7 @@ export default function App() {
               <button
                 onClick={() => setActiveTab('dashboard')}
                 className={`w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
-                  activeTab === 'dashboard' && !selectedCourierId ? 'bg-space-blue text-white shadow-glow-blue' : 'text-space-gray hover:bg-white/5 hover:text-white'
+                  activeTab === 'dashboard' && !selectedCourierId ? 'bg-space-blue text-white shadow-sm' : 'text-space-gray hover:bg-white/5 hover:text-white'
                 }`}
               >
                 <Compass className="w-4 h-4" />
@@ -77,7 +77,7 @@ export default function App() {
               <button
                 onClick={() => setActiveTab('couriers')}
                 className={`w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
-                  activeTab === 'couriers' || selectedCourierId ? 'bg-space-blue text-white shadow-glow-blue' : 'text-space-gray hover:bg-white/5 hover:text-white'
+                  activeTab === 'couriers' || selectedCourierId ? 'bg-space-blue text-white shadow-sm' : 'text-space-gray hover:bg-white/5 hover:text-white'
                 }`}
               >
                 <Users className="w-4 h-4" />
@@ -87,7 +87,7 @@ export default function App() {
               <button
                 onClick={() => setActiveTab('import')}
                 className={`w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
-                  activeTab === 'import' && !selectedCourierId ? 'bg-space-blue text-white shadow-glow-blue' : 'text-space-gray hover:bg-white/5 hover:text-white'
+                  activeTab === 'import' && !selectedCourierId ? 'bg-space-blue text-white shadow-sm' : 'text-space-gray hover:bg-white/5 hover:text-white'
                 }`}
               >
                 <FileText className="w-4 h-4" />
@@ -97,7 +97,7 @@ export default function App() {
               <button
                 onClick={() => setActiveTab('logs')}
                 className={`w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
-                  activeTab === 'logs' && !selectedCourierId ? 'bg-space-blue text-white shadow-glow-blue' : 'text-space-gray hover:bg-white/5 hover:text-white'
+                  activeTab === 'logs' && !selectedCourierId ? 'bg-space-blue text-white shadow-sm' : 'text-space-gray hover:bg-white/5 hover:text-white'
                 }`}
               >
                 <Database className="w-4 h-4" />

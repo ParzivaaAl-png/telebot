@@ -13,8 +13,38 @@ export default function AuditLogs() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <Activity className="w-8 h-8 text-space-blue animate-spin" />
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Журнал аудита</h1>
+          <p className="text-sm text-space-gray mt-1">
+            Хронология действий администраторов в системе Atlas Fleet
+          </p>
+        </div>
+
+        <div className="glass-card rounded-xl border border-white/5 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse text-sm">
+              <thead>
+                <tr className="border-b border-white/5 bg-white/2 text-space-gray text-xs uppercase font-bold tracking-wider">
+                  <th className="py-4 px-6">Администратор</th>
+                  <th className="py-4 px-6">Действие</th>
+                  <th className="py-4 px-6">Подробности</th>
+                  <th className="py-4 px-6">Дата и время</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <tr key={i} className="border-b border-white/5">
+                    <td className="py-4 px-6"><div className="h-4 w-28 rounded skeleton-shimmer" /></td>
+                    <td className="py-4 px-6"><div className="h-5 w-24 rounded-md skeleton-shimmer" /></td>
+                    <td className="py-4 px-6"><div className="h-4 w-64 rounded skeleton-shimmer" /></td>
+                    <td className="py-4 px-6"><div className="h-4 w-32 rounded skeleton-shimmer font-mono" /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     );
   }
@@ -51,7 +81,7 @@ export default function AuditLogs() {
               {data.map((l) => (
                 <tr key={l.id} className="border-b border-white/5 hover:bg-white/1 transition-colors">
                   <td className="py-4 px-6 font-bold text-white flex items-center space-x-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-space-purple shadow-glow-purple" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-space-purple" />
                     <span>{l.adminUsername}</span>
                   </td>
                   <td className="py-4 px-6">

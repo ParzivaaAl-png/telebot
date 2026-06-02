@@ -123,7 +123,23 @@ export default function ImportCSV() {
         <div className="glass-card rounded-xl p-6 border border-white/5 space-y-4">
           <h3 className="text-sm font-bold text-space-gray uppercase tracking-wider">Результаты операции</h3>
           
-          {importResult ? (
+          {importMutation.isLoading ? (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 glass-card rounded-lg space-y-2">
+                  <div className="w-6 h-6 rounded-full skeleton-shimmer mx-auto" />
+                  <div className="h-6 w-12 rounded skeleton-shimmer mx-auto" />
+                  <div className="h-2 w-20 rounded skeleton-shimmer mx-auto" />
+                </div>
+                <div className="p-4 glass-card rounded-lg space-y-2">
+                  <div className="w-6 h-6 rounded-full skeleton-shimmer mx-auto" />
+                  <div className="h-6 w-12 rounded skeleton-shimmer mx-auto" />
+                  <div className="h-2 w-20 rounded skeleton-shimmer mx-auto" />
+                </div>
+              </div>
+              <div className="h-16 w-full rounded-lg skeleton-shimmer" />
+            </div>
+          ) : importResult ? (
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 bg-space-green/10 border border-space-green/20 rounded-lg text-center">

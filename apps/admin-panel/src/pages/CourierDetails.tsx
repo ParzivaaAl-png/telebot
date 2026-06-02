@@ -80,8 +80,55 @@ export default function CourierDetails() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <RefreshCw className="w-8 h-8 text-space-blue animate-spin" />
+      <div className="space-y-6">
+        {/* Header back button */}
+        <div className="flex items-center space-x-3">
+          <div className="w-9 h-9 rounded-lg skeleton-shimmer" />
+          <div className="space-y-2">
+            <div className="h-5 w-40 rounded skeleton-shimmer" />
+            <div className="h-4 w-52 rounded skeleton-shimmer" />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="space-y-6">
+            {/* Card 1 Skeleton */}
+            <div className="glass-card p-6 space-y-4">
+              <div className="h-4 w-32 rounded skeleton-shimmer" />
+              <div className="space-y-3 pt-2">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div key={i} className="flex justify-between">
+                    <div className="h-3 w-16 rounded skeleton-shimmer" />
+                    <div className="h-3 w-24 rounded skeleton-shimmer" />
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Card 2 Skeleton */}
+            <div className="glass-card p-6 space-y-4">
+              <div className="h-4 w-36 rounded skeleton-shimmer" />
+              <div className="space-y-3 pt-2">
+                <div className="h-8 w-full rounded-lg skeleton-shimmer" />
+                <div className="h-8 w-full rounded-lg skeleton-shimmer" />
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-2 space-y-6">
+            {/* Card 3 Skeleton */}
+            <div className="glass-card p-6 space-y-4">
+              <div className="h-4 w-44 rounded skeleton-shimmer" />
+              <div className="h-28 w-full rounded-lg skeleton-shimmer" />
+            </div>
+            
+            {/* Card 4 Skeleton */}
+            <div className="glass-card p-6 space-y-4">
+              <div className="h-4 w-40 rounded skeleton-shimmer" />
+              <div className="h-24 w-full rounded-lg skeleton-shimmer" />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

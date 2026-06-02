@@ -41,11 +41,11 @@ export default function Couriers() {
 
   const getRankBadgeClass = (rk: string) => {
     switch (rk) {
-      case 'CADET': return 'bg-space-blue/10 text-space-blue border-space-blue/20';
-      case 'NAVIGATOR': return 'bg-space-purple/10 text-space-purple border-space-purple/20';
-      case 'PILOT': return 'bg-space-green/10 text-space-green border-space-green/20';
-      case 'COMMANDER': return 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20';
-      default: return 'bg-white/10 text-white border-white/20';
+      case 'CADET': return 'bg-space-blue/15 text-space-blue';
+      case 'NAVIGATOR': return 'bg-space-purple/15 text-space-purple';
+      case 'PILOT': return 'bg-space-green/15 text-space-green';
+      case 'COMMANDER': return 'bg-yellow-400/15 text-yellow-400';
+      default: return 'bg-white/10 text-white';
     }
   };
 
@@ -90,8 +90,40 @@ export default function Couriers() {
       {/* Table grid */}
       <div className="glass-card rounded-xl border border-white/5 overflow-hidden">
         {isLoading ? (
-          <div className="flex items-center justify-center py-24">
-            <Activity className="w-8 h-8 text-space-blue animate-spin" />
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse text-sm">
+              <thead>
+                <tr className="border-b border-white/5 bg-white/2 text-space-gray text-xs uppercase font-bold tracking-wider">
+                  <th className="py-4 px-6">Имя</th>
+                  <th className="py-4 px-6">Telegram ID</th>
+                  <th className="py-4 px-6">Ранг</th>
+                  <th className="py-4 px-6">Заказы</th>
+                  <th className="py-4 px-6">Рейтинг</th>
+                  <th className="py-4 px-6">Звездная карта</th>
+                  <th className="py-4 px-6">Регистрация</th>
+                  <th className="py-4 px-6 text-right">Действия</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <tr key={i} className="border-b border-white/5">
+                    <td className="py-4 px-6"><div className="h-4 w-28 rounded skeleton-shimmer" /></td>
+                    <td className="py-4 px-6"><div className="h-4 w-20 rounded skeleton-shimmer font-mono" /></td>
+                    <td className="py-4 px-6"><div className="h-5 w-16 rounded-full skeleton-shimmer" /></td>
+                    <td className="py-4 px-6"><div className="h-4 w-12 rounded skeleton-shimmer" /></td>
+                    <td className="py-4 px-6"><div className="h-4 w-12 rounded skeleton-shimmer" /></td>
+                    <td className="py-4 px-6">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-16 h-1.5 rounded-full skeleton-shimmer" />
+                        <div className="h-3 w-8 rounded skeleton-shimmer" />
+                      </div>
+                    </td>
+                    <td className="py-4 px-6"><div className="h-3.5 w-16 rounded skeleton-shimmer" /></td>
+                    <td className="py-4 px-6 text-right"><div className="h-8 w-20 rounded-lg skeleton-shimmer inline-block" /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         ) : error ? (
           <div className="text-center py-12 text-red-500 font-bold">
@@ -142,7 +174,7 @@ export default function Couriers() {
                     <td className="py-4 px-6 font-bold text-white">{c.name}</td>
                     <td className="py-4 px-6 text-space-gray font-mono">{c.telegramId}</td>
                     <td className="py-4 px-6">
-                      <span className={`px-2 py-0.5 border rounded-full text-xs font-semibold ${getRankBadgeClass(c.rank)}`}>
+                      <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${getRankBadgeClass(c.rank)}`}>
                         {c.rank}
                       </span>
                     </td>

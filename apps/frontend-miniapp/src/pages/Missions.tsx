@@ -9,6 +9,8 @@ import confetti from 'canvas-confetti';
 
 export default function Missions() {
   const { initData } = useTelegram();
+  const [expandedStage, setExpandedStage] = React.useState<number | null>(1);
+  const [shakingStage, setShakingStage] = React.useState<number | null>(null);
 
   const { data, isLoading, error } = useQuery<CourierMissionsResponse>({
     queryKey: ['missions', initData],
@@ -28,6 +30,19 @@ export default function Missions() {
           origin: { y: 0.85 },
           colors: ['#00A3FF', '#7B61FF', '#00C48C', '#FFFFFF'],
         });
+      }
+
+      // Auto-expand the active mission or the first uncompleted one
+      const active = data.missions.find(m => m.status === 'ACTIVE');
+      if (active) {
+        setExpandedStage(active.stage);
+      } else {
+        const completedCount = data.missions.filter(m => m.status === 'COMPLETED').length;
+        if (completedCount === 3) {
+          setExpandedStage(3);
+        } else {
+          setExpandedStage(completedCount + 1);
+        }
       }
     }
   }, [data]);
@@ -92,7 +107,7 @@ export default function Missions() {
         );
       case 'ACTIVE':
         return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-space-blue text-[#0A1628] animate-pulse">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-space-blue text-[#0A1628]">
             <span>Активна</span>
           </span>
         );
@@ -116,7 +131,7 @@ export default function Missions() {
         );
       case 'ACTIVE':
         return (
-          <div className="p-2 bg-space-blue/10 rounded-lg text-space-blue">
+          <div className="p-2 bg-space-blue/10 rounded-lg text-space-blue animate-pulse">
             <Zap className="w-4 h-4" />
           </div>
         );
@@ -132,23 +147,34 @@ export default function Missions() {
 
   const getMissionTitle = (stage: number) => {
     switch (stage) {
-      case 1: return 'Первый полет';
-      case 2: return 'Звездный марш';
-      case 3: return 'Космический Ас';
+      case 1: return 'Запуск';
+      case 2: return 'Орбита';
+      case 3: return 'Гиперпрыжок';
       default: return `Миссия Этап ${stage}`;
     }
   };
 
+  const getMissionCondition = (stage: number) => {
+    switch (stage) {
+      case 1: return 'пройти регистрацию и выполнить первые 20 заказов';
+      case 2: return 'выполнить 40 поездок за 4 дня';
+      case 3: return 'удерживать рейтинг 4.8+ и выполнить 60 заказов за неделю';
+      default: return '';
+    }
+  };
+
+  const completedCount = data.missions.filter(m => m.status === 'COMPLETED').length;
+
   return (
     <div className="px-4 py-3 space-y-6 font-sans">
       
-      <div className="text-center">
+      <div className="text-center space-y-1">
         <h1 className="text-xl font-bold tracking-tight text-white">
-          Дерево миссий
+          Миссии — First Flight
         </h1>
-        <p className="text-xs text-space-gray/95 mt-1">
-          Выполняйте задания и получайте дополнительные бонусы
-        </p>
+        <div className="inline-flex items-center px-3 py-1 bg-white/5 rounded-full text-[10px] font-semibold text-space-gray">
+          Завершено {completedCount} из 3
+        </div>
       </div>
 
       <div className="relative flex flex-col items-center space-y-5">
@@ -158,15 +184,38 @@ export default function Missions() {
 
         {data.missions.map((mission, index) => {
           const isLocked = mission.status === 'LOCKED';
+          const isActive = mission.status === 'ACTIVE';
+          const isCompleted = mission.status === 'COMPLETED';
+          const isExpanded = expandedStage === mission.stage;
           const pct = Math.min(100, (mission.progress / mission.target) * 100);
+
+          const handleNodeClick = () => {
+            if (isLocked) {
+              setShakingStage(mission.stage);
+              setTimeout(() => setShakingStage(null), 400);
+              return;
+            }
+            setExpandedStage(isExpanded ? null : mission.stage);
+          };
 
           return (
             <motion.div
               key={mission.id}
               initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={
+                shakingStage === mission.stage 
+                  ? { x: [-4, 4, -4, 4, -2, 2, 0], transition: { duration: 0.4 } } 
+                  : { opacity: 1, y: 0 }
+              }
               transition={{ delay: index * 0.1 }}
-              className={`w-full max-w-sm glass-card relative overflow-hidden bg-gradient-to-br from-white/[0.03] to-white/[0.01] ${isLocked ? 'opacity-55' : ''}`}
+              onClick={handleNodeClick}
+              className={`w-full max-w-sm glass-card relative overflow-hidden bg-gradient-to-br from-white/[0.03] to-white/[0.01] cursor-pointer transition-shadow duration-300 ${
+                isLocked ? 'opacity-50' : ''
+              } ${
+                isActive ? 'shadow-[0_0_20px_rgba(0,163,255,0.12)] border-space-blue/30' : ''
+              } ${
+                isCompleted ? 'border-space-green/20' : ''
+              }`}
             >
               
               {/* WalletCard shine effect inside active items */}
@@ -186,47 +235,66 @@ export default function Missions() {
                   <h3 className="font-bold text-sm text-white/95 leading-tight mt-1">
                     {getMissionTitle(mission.stage)}
                   </h3>
-                  
-                  {/* Rewards items styled as simple solid pills without borders */}
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    <span className="text-[9px] font-semibold bg-white/10 px-2.5 py-0.5 rounded-full text-white/90">
-                      Награда: {mission.reward}
-                    </span>
-                    {mission.deadlineDays && (
-                      <span className="text-[9px] font-semibold bg-white/10 px-2.5 py-0.5 rounded-full text-white/90">
-                        Срок: {mission.deadlineDays} дн.
-                      </span>
-                    )}
-                    {mission.minRating && (
-                      <span className="text-[9px] font-semibold bg-white/10 px-2.5 py-0.5 rounded-full text-white/90">
-                        Рейтинг &ge; {mission.minRating}
-                      </span>
-                    )}
-                  </div>
 
-                  {/* Clean progress bar */}
-                  {!isLocked && (
-                    <div className="mt-4">
-                      <div className="flex justify-between text-[10px] text-space-gray mb-1.5 font-medium">
-                        <span>Прогресс поездок</span>
-                        <span>{mission.progress} / {mission.target}</span>
+                  {/* Expandable Accordion content */}
+                  <motion.div
+                    initial={false}
+                    animate={{ height: isExpanded ? 'auto' : 0, opacity: isExpanded ? 1 : 0 }}
+                    transition={{ duration: 0.25, ease: 'easeInOut' }}
+                    className="overflow-hidden space-y-3"
+                  >
+                    <div className="pt-3">
+                      <p className="text-[10px] text-space-gray/90 leading-relaxed">
+                        <span className="font-semibold text-white/70">Условие:</span> {getMissionCondition(mission.stage)}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-1.5">
+                      <span className="text-[9px] font-semibold bg-white/10 px-2.5 py-0.5 rounded-full text-white/90">
+                        Награда: {mission.reward}
+                      </span>
+                      {mission.deadlineDays && (
+                        <span className="text-[9px] font-semibold bg-white/10 px-2.5 py-0.5 rounded-full text-white/90">
+                          Срок: {mission.deadlineDays} дн.
+                        </span>
+                      )}
+                    </div>
+
+                    {!isLocked && (
+                      <div className="pt-2">
+                        <div className="flex justify-between text-[10px] text-space-gray mb-1.5 font-medium">
+                          <span>Прогресс миссии</span>
+                          <span>{mission.progress} / {mission.target}</span>
+                        </div>
+                        <div className="h-1 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                          <div 
+                            style={{ width: `${pct}%` }}
+                            className={`h-full rounded-full transition-all duration-500 ${
+                              isCompleted ? 'bg-space-green' : 'bg-space-blue'
+                            }`}
+                          />
+                        </div>
                       </div>
-                      <div className="h-1 bg-white/5 rounded-full overflow-hidden border border-white/5">
-                        <div 
-                          style={{ width: `${pct}%` }}
-                          className={`h-full rounded-full transition-all duration-500 ${
-                            mission.status === 'COMPLETED' ? 'bg-space-green' : 'bg-space-blue'
-                          }`}
-                        />
-                      </div>
+                    )}
+
+                    {isCompleted && (
+                      <p className="text-[9px] text-space-green font-semibold mt-1">
+                        Завершено: {new Date(mission.updatedAt).toLocaleDateString('ru-RU')}
+                      </p>
+                    )}
+                  </motion.div>
+
+                  {isLocked && (
+                    <div className="text-[10px] text-space-gray/50 italic mt-1.5 flex items-center space-x-1">
+                      <Lock className="w-3 h-3" />
+                      <span>Заверши предыдущую миссию</span>
                     </div>
                   )}
 
-                  {isLocked && (
-                    <div className="text-[10px] text-space-gray/50 italic mt-3 flex items-center space-x-1">
-                      <Lock className="w-3 h-3" />
-                      <span>Миссия заблокирована</span>
-                    </div>
+                  {!isExpanded && !isLocked && (
+                    <p className="text-[9px] text-space-blue font-semibold mt-1.5">
+                      Нажмите, чтобы открыть
+                    </p>
                   )}
                 </div>
               </div>

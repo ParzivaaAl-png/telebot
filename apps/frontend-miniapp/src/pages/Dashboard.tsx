@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '../api';
 import { useTelegram } from '../hooks/useTelegram';
 import { useAppStore } from '../store';
-import { CourierMeResponse, CourierNotificationsResponse } from '../shared-types';
+import { CourierMeResponse, CourierNotificationsResponse, CourierMissionsResponse } from '../shared-types';
 import { Shield, Rocket, Compass, Award, Star, Bell, ChevronRight, Activity, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -21,6 +21,13 @@ export default function Dashboard() {
   const { data: notificationsData } = useQuery<CourierNotificationsResponse>({
     queryKey: ['notifications', initData],
     queryFn: () => apiRequest<CourierNotificationsResponse>('/courier/me/notifications', initData),
+    refetchInterval: 5000,
+    enabled: !!initData,
+  });
+
+  const { data: missionsData } = useQuery<CourierMissionsResponse>({
+    queryKey: ['missions', initData],
+    queryFn: () => apiRequest<CourierMissionsResponse>('/courier/me/missions', initData),
     refetchInterval: 5000,
     enabled: !!initData,
   });
@@ -131,6 +138,8 @@ export default function Dashboard() {
 
   const { courier, nextRank, ordersToNextRank } = meData;
 
+  const activeMission = missionsData?.missions.find(m => m.status === 'ACTIVE');
+
   // Rank thresholds
   const getRankThreshold = (rank: string) => {
     if (rank === 'CADET') return 100;
@@ -162,6 +171,16 @@ export default function Dashboard() {
   };
 
   const rankConf = getRankConfig(courier.rank);
+
+  const getRankStars = (rank: string) => {
+    switch (rank) {
+      case 'CADET': return '★';
+      case 'NAVIGATOR': return '★★';
+      case 'PILOT': return '★★★';
+      case 'COMMANDER': return '★★★★';
+      default: return '★';
+    }
+  };
 
   // Telemetry details (today, week, last flight)
   const getTelemetry = (ordersCount: number) => {
@@ -217,10 +236,14 @@ export default function Dashboard() {
             <h1 className="text-lg font-bold tracking-tight text-white/95">
               {courier.name}
             </h1>
-            {/* Rank badge */}
-            <div className={`inline-flex items-center space-x-1.5 px-2.5 py-0.5 mt-1 rounded-full text-[9px] font-semibold tracking-wide ${rankConf.badgeColor}`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${rankConf.dotColor} animate-pulse`} />
-              <span>{rankConf.name}</span>
+            {/* Rank badge and stars */}
+            <div className="flex items-center space-x-2 mt-1">
+              <div className={`inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-[9px] font-bold tracking-wide ${rankConf.badgeColor}`}>
+                <span>{rankConf.name}</span>
+              </div>
+              <span className="text-yellow-400 text-xs font-bold tracking-wider drop-shadow-[0_0_6px_rgba(250,204,21,0.3)]">
+                {getRankStars(courier.rank)}
+              </span>
             </div>
           </div>
         </div>
@@ -303,68 +326,74 @@ export default function Dashboard() {
 
       </motion.div>
 
-      {/* 2. Wolt-Style Categories Row */}
+      {/* 2. Navigation Cards (First Flight & Star Map) */}
       <div className="space-y-3">
         <h2 className="text-[11px] font-bold text-space-gray tracking-wider uppercase px-1">
-          Разделы
+          Панель управления
         </h2>
         
-        <div className="grid grid-cols-3 gap-3">
-          
-          {/* Category 1: Missions */}
+        <div className="grid grid-cols-2 gap-3">
+          {/* Card 1: First Flight */}
           <div 
             onClick={() => setActiveTab('missions')}
-            className="glass-card p-4 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-white/[0.05] active:scale-95 transition-all relative overflow-hidden"
+            className="glass-card p-4 flex flex-col justify-between cursor-pointer hover:bg-white/[0.05] active:scale-[0.97] transition-all relative overflow-hidden h-32"
           >
             <div className="wallet-card-overlay" />
-            
-            {/* Tag like Wolt's "Новинка" / Solid & Borderless */}
-            <span className="absolute top-1 right-1 bg-space-blue text-[#0A1628] text-[8px] font-black px-1.5 py-0.5 rounded">
-              АКТИВНО
-            </span>
-            
-            <div className="w-10 h-10 rounded-full bg-space-purple/10 flex items-center justify-center text-space-purple mb-2">
-              <Rocket className="w-5 h-5" />
+            <div className="flex justify-between items-start relative z-10">
+              <div className="w-8 h-8 rounded-full bg-space-purple/10 flex items-center justify-center text-space-purple">
+                <Rocket className="w-4 h-4" />
+              </div>
+              <span className="text-[8px] font-bold bg-space-purple/15 text-space-purple px-2 py-0.5 rounded-full uppercase tracking-wider">
+                {missionsData?.missions.filter(m => m.status === 'COMPLETED').length || 0}/3 Готово
+              </span>
             </div>
-            <span className="text-[11px] font-bold text-white/95">Миссии</span>
+            <div className="relative z-10">
+              <h3 className="text-xs font-bold text-white/90">First Flight</h3>
+              <p className="text-[10px] text-space-gray mt-1 truncate">
+                {activeMission ? `Активна: ${activeMission.stage === 1 ? 'Запуск' : activeMission.stage === 2 ? 'Орбита' : 'Гиперпрыжок'}` : 'Все пройдено'}
+              </p>
+            </div>
           </div>
 
-          {/* Category 2: Star Map */}
+          {/* Card 2: Star Map */}
           <div 
             onClick={() => setActiveTab('starmap')}
-            className="glass-card p-4 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-white/[0.05] active:scale-95 transition-all relative overflow-hidden"
+            className="glass-card p-4 flex flex-col justify-between cursor-pointer hover:bg-white/[0.05] active:scale-[0.97] transition-all relative overflow-hidden h-32"
           >
             <div className="wallet-card-overlay" />
-            
-            <span className="absolute top-1 right-1 bg-space-purple text-white text-[8px] font-black px-1.5 py-0.5 rounded">
-              {courier.starMapProgress}/80
-            </span>
-            
-            <div className="w-10 h-10 rounded-full bg-space-blue/10 flex items-center justify-center text-space-blue mb-2">
-              <Compass className="w-5 h-5" />
+            <div className="flex justify-between items-start relative z-10">
+              <div className="w-8 h-8 rounded-full bg-space-blue/10 flex items-center justify-center text-space-blue">
+                <Compass className="w-4 h-4" />
+              </div>
+              
+              {/* Mini Circle Progress */}
+              <div className="relative w-8 h-8">
+                <svg className="w-full h-full transform -rotate-90">
+                  <circle cx="16" cy="16" r="12" stroke="rgba(255,255,255,0.04)" strokeWidth="2.5" fill="transparent" />
+                  <circle 
+                    cx="16" 
+                    cy="16" 
+                    r="12" 
+                    stroke="#00A3FF" 
+                    strokeWidth="2.5" 
+                    fill="transparent" 
+                    strokeDasharray={2 * Math.PI * 12}
+                    strokeDashoffset={2 * Math.PI * 12 - (Math.min(80, courier.starMapProgress) / 80) * 2 * Math.PI * 12}
+                    strokeLinecap="round"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center text-[7px] font-bold text-white">
+                  {courier.starMapProgress}
+                </div>
+              </div>
             </div>
-            <span className="text-[11px] font-bold text-white/95">Карта</span>
-          </div>
-
-          {/* Category 3: Journal */}
-          <div 
-            onClick={() => setActiveTab('notifications')}
-            className="glass-card p-4 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-white/[0.05] active:scale-95 transition-all relative overflow-hidden"
-          >
-            <div className="wallet-card-overlay" />
-            
-            {unreadCount > 0 && (
-              <span className="absolute top-1 right-1 bg-red-500 text-white text-[8px] font-black px-1.5 py-0.5 rounded">
-                +{unreadCount}
-              </span>
-            )}
-            
-            <div className="w-10 h-10 rounded-full bg-space-green/10 flex items-center justify-center text-space-green mb-2">
-              <Bell className="w-5 h-5" />
+            <div className="relative z-10">
+              <h3 className="text-xs font-bold text-white/90">Звездная карта</h3>
+              <p className="text-[10px] text-space-gray mt-1">
+                До бонуса: {Math.max(0, 80 - courier.starMapProgress)}
+              </p>
             </div>
-            <span className="text-[11px] font-bold text-white/95">Журнал</span>
           </div>
-
         </div>
       </div>
 
