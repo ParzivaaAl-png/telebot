@@ -316,10 +316,7 @@ export default function Missions() {
         </div>
       </div>
 
-      <div className="relative flex flex-col items-center space-y-5">
-
-        {/* Simple elegant vertical line */}
-        <div className="absolute top-10 bottom-10 w-[1px] bg-white/5 -z-10" />
+      <div className="flex flex-col items-center space-y-5">
 
         {data.missions.map((mission) => (
           <MissionCard

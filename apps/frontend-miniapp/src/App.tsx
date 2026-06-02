@@ -50,20 +50,24 @@ export default function App() {
           </span>
         </header>
 
-        {/* Content Area — sections swap instantly. We deliberately do NOT
-            fade/slide this wrapper: animating opacity or transform on an
-            ancestor of the backdrop-filter glass cards makes WebKit (Telegram
-            iOS WebView) re-rasterize every blur in one frame when the tween
-            settles — the exact "blink at the end of the animation" we're
-            killing. Smoothness comes from the per-section load micro-animations
-            (progress fill, activity ring) and the sliding nav pill instead. */}
+        {/* Content Area — gentle fade-in per section. Safe now that the cards
+            are static panels (no live backdrop-filter): fading the wrapper can
+            no longer trigger the WebKit blur black-flash. Keying on activeTab
+            remounts + re-runs the fade on every tab switch. */}
         <main className="flex-grow relative z-10">
-          {renderActiveScreen()}
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+          >
+            {renderActiveScreen()}
+          </motion.div>
         </main>
 
         {/* Bottom Tab Bar — floating capsule above Home Indicator */}
         <nav className="fixed bottom-0 left-0 right-0 z-40 max-w-md mx-auto px-4" style={{ paddingBottom: 'calc(8px + env(safe-area-inset-bottom, 8px))' }}>
-          <div className="bg-[#1A2235]/85 backdrop-blur-[24px] rounded-2xl px-2 py-1.5 flex justify-around shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+          <div className="bg-[#1A2235]/95 rounded-2xl px-2 py-1.5 flex justify-around shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
           
             {/* Tab 1: Dashboard */}
             <button
